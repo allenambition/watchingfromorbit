@@ -1,0 +1,177 @@
+{
+  "name": "Aaron Allen",
+  "title": "watchingfromorbit",
+  "tagline": "Good things and big ideas",
+  "links": [
+    {
+      "label": "Instagram",
+      "url": "https://instagram.com/allenambition"
+    },
+    {
+      "label": "Threads",
+      "url": "https://threads.net/@allenambition"
+    },
+    {
+      "label": "Apple Music",
+      "url": "https://music.apple.com/"
+    }
+  ],
+  "records": [
+    {
+      "title": "Brown Liquor & Me",
+      "by": "Playlist",
+      "note": "",
+      "apple": "https://music.apple.com/us/playlist/brown-liquor-me/pl.u-yZyVWRVFzBAavb",
+      "cover": null,
+      "hue": 28
+    },
+    {
+      "title": "1-25",
+      "by": "Playlist",
+      "note": "",
+      "apple": "https://music.apple.com/us/playlist/1-25/pl.u-qxyl0J5sXRY9pN",
+      "cover": null,
+      "hue": 205
+    }
+  ],
+  "shelf": [],
+  "closet": [],
+  "places": [
+    {
+      "name": "Chicago",
+      "country": "Illinois",
+      "when": null,
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "note": "Home.",
+      "photos": []
+    },
+    {
+      "name": "Florence",
+      "country": "Italy",
+      "when": null,
+      "lat": 43.7696,
+      "lon": 11.2558,
+      "note": "",
+      "photos": []
+    },
+    {
+      "name": "Mexico City",
+      "country": "Mexico",
+      "when": "January 2026",
+      "lat": 19.4326,
+      "lon": -99.1332,
+      "note": "",
+      "photos": []
+    },
+    {
+      "name": "New Orleans",
+      "country": "Louisiana",
+      "when": "October 2026",
+      "lat": 29.9511,
+      "lon": -90.0715,
+      "note": "",
+      "photos": []
+    },
+    {
+      "name": "Houston",
+      "country": "Texas",
+      "when": "November 2026",
+      "lat": 29.7604,
+      "lon": -95.3698,
+      "note": "",
+      "photos": []
+    }
+  ],
+  "hotspots": {
+    "_help": "Only used when room pictures exist. Each box is [left, top, width, height] in % of the picture. null removes that hotspot. globe_zoom_origin is the [x, y] point the camera zooms toward. shelf_rows are the shelves' top surfaces [left, top, width, item height] so covers can stand on them.",
+    "lamp": [
+      46,
+      26,
+      8,
+      11
+    ],
+    "globe": [
+      8,
+      43,
+      18,
+      40
+    ],
+    "shelf": [
+      35,
+      37,
+      30,
+      16
+    ],
+    "turntable": [
+      29,
+      60,
+      42,
+      24
+    ],
+    "crate": null,
+    "closet": [
+      72,
+      20,
+      27,
+      65
+    ],
+    "globe_zoom_origin": [
+      16,
+      56
+    ],
+    "shelf_rows": [
+      [
+        36,
+        41,
+        28,
+        7.5
+      ],
+      [
+        36,
+        50.8,
+        28,
+        7.5
+      ]
+    ]
+  },
+  "fonts": {
+    "display": "Bodoni Moda",
+    "text": "Jost",
+    "_help": "Any Google Fonts family name. display = title, headings, note lines; text = everything else."
+  },
+  "sound": "chain",
+  "_sound_help": "chain (pull-chain click), switch (wall switch), or none",
+  "ambient": {
+    "src": "synth",
+    "volume": 0.3,
+    "_help": "'synth' makes a quiet room tone in the browser, no file needed. Or a path to a looping file in audio/. null hides the button. Always off until a visitor turns it on."
+  },
+  "essays": [],
+  "_essays_help": {
+    "title": "",
+    "subtitle": "",
+    "date": "",
+    "place": "Must match a place name on the globe to appear there",
+    "cover": null,
+    "body": "Paragraphs separated by a blank line"
+  },
+  "reflections": [],
+  "_reflections_help": {
+    "title": "",
+    "date": "",
+    "place": "Optional, matches a globe place",
+    "text": ""
+  },
+  "_places_help": {
+    "photos": "List of \"img/x.jpg\" strings, or objects {\"src\":\"img/x.jpg\",\"caption\":\"...\"}"
+  },
+  "timezone": "America/Chicago",
+  "scenes": {
+    "_help": "Room pictures by time of day in Chicago. hours is [from, to) on a 24h clock; a scene without hours is the default. Every scene needs on and off versions of the same frame.",
+    "night": {
+      "on": "img/room-night-on.jpg",
+      "off": "img/room-night-off.jpg"
+    }
+  }
+}
