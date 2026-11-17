@@ -2,6 +2,8 @@
 
 A personal site built as one room. Visitors switch on the light, then click objects in the room to open what's inside: the globe holds travel, the turntable holds records, the shelves hold what I'm reading and watching, the wardrobe holds clothes.
 
+Plans, decisions and image-editing steps are in `NOTES.md`.
+
 It is plain HTML, CSS and JavaScript. There is no framework, no build step and no server code. Everything shown on the site comes from `content.json`.
 
 ## Files
