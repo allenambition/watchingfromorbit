@@ -11,6 +11,10 @@ Last updated: 2026-11-17.
 - Working: light switch, globe with zoom-in, Italy destination page, records with a player that keeps playing across the site and in background tabs, phone swiping, visitor counting.
 - Real content so far: Italy (12 photos and caption), two Apple Music playlists. Shelf and wardrobe are empty. Chicago, Mexico City, New Orleans and Houston are pins with no content yet.
 
+## Saved versions
+
+- `observatory-v1` (branch, saved 2026-11-17): the live site before the 21:9 redesign. 16:9 observatory room with the Edison bulb, Italy page, player, custom domain. To see it: github.com/allenambition/watchingfromorbit/tree/observatory-v1. To go back to it, restore its `index.html`, `content.json` and `img/room-*` onto `main` (or ask Claude to). Don't merge or delete the branch; it's a snapshot, not work in progress.
+
 ## The room picture: order of work
 
 Every change to the picture moves things, and every move means re-placing the clickable areas. So the picture is finished in this order, once:
