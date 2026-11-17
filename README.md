@@ -53,7 +53,7 @@ Each destination is one pin on the globe and one page. Italy is the finished exa
 }
 ```
 
-- `id` is used in links: `allenambition.github.io/watchingfromorbit/#italy` opens straight to that page. Lowercase, no spaces.
+- `id` is used in links: `watchingfromorbit.com/#italy` opens straight to that page. Lowercase, no spaces.
 - `cover` is the large lead photo. Leave it out and the first photo leads.
 - Put each trip's photos in their own folder, `img/travel/<id>/`. For each photo, also save a smaller copy with `-sm` added to the name (`colosseum-sm.jpg`, about 900 px on the long side). The grid loads the small copy and the full one opens when tapped. If there's no small copy, the full one is used.
 - Remove location data from photos before adding them (export from Photos with "Include location" off, or ask Claude to prepare them).
@@ -160,7 +160,7 @@ The room is a photograph (generated image). The clickable areas are invisible bo
 
 ## Deploying
 
-The site is hosted on GitHub Pages from this repository: Settings → Pages → Deploy from a branch → `main`, folder `/ (root)`. Every commit to `main` updates the live site within a minute or two. To use your own domain later, add it under Settings → Pages → Custom domain and follow the DNS steps shown there.
+The site is hosted on GitHub Pages from this repository (Settings → Pages → Deploy from a branch → `main`, folder `/ (root)`) at the custom domain `watchingfromorbit.com`, which is set in the `CNAME` file. Don't delete that file. Every commit to `main` updates the live site within a minute or two. Large files (audio, video) live in Cloudflare R2 at `https://media.watchingfromorbit.com/`; see `NOTES.md`.
 
 ## Notes for whoever works on this next
 

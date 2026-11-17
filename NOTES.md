@@ -6,7 +6,7 @@ Last updated: 2026-11-17.
 
 ## Where things stand
 
-- Live at https://allenambition.github.io/watchingfromorbit/ (GitHub Pages, branch `main`).
+- Live at https://watchingfromorbit.com/ (GitHub Pages, branch `main`; the domain is registered at Cloudflare with auto-renew, DNS on Cloudflare set to DNS only). The old github.io address forwards there.
 - One room: the observatory lounge (porthole with Chicago skyline, floor globe, bulb, two shelves, console with turntable, wardrobe).
 - Working: light switch, globe with zoom-in, Italy destination page, records with a player that keeps playing across the site and in background tabs, phone swiping, visitor counting.
 - Real content so far: Italy (12 photos and caption), two Apple Music playlists. Shelf and wardrobe are empty. Chicago, Mexico City, New Orleans and Houston are pins with no content yet.
@@ -29,6 +29,10 @@ Why widen at all: on a phone the room is cropped to a slice and swiped sideways;
 - Left, near the porthole: "A 1970s brass refracting telescope on a wooden tripod, angled up toward the window, warm tungsten light."
 - Right, past the wardrobe: "A small 1970s Italian space-age television with a rounded white plastic shell on a low walnut stand, a modern game console on the shelf below, screen softly glowing."
 - Right, in front of the wall: "A slim brass and smoked-glass bar cart with a few bourbon bottles and two crystal tumblers."
+
+### Generating the room wide from the start
+
+Since the room is still being redesigned in ChatGPT, it can be generated wide (21:9) in one go, with the new objects in the prompt. Before accepting it, check the downloaded file's size (Finder, Get Info, Dimensions): at least about 2000×860, or it looks soft on a laptop because the room fills the window's height. Also check the camera stayed straight-on and level. If either fails, generate at 16:9 and widen in Photoshop instead.
 
 ### Fallback ChatGPT prompt for widening
 
@@ -68,10 +72,11 @@ Possible later: each room is its own picture pair, hotspots and objects, with a 
 
 ## Files, storage and the domain
 
-- Plan: buy `watchingfromorbit.com` through Cloudflare (about $10–12/year) and use Cloudflare R2 for large files (audio, video) at a subdomain like `media.watchingfromorbit.com`.
+- `watchingfromorbit.com` registered through Cloudflare; Cloudflare R2 holds large files (audio, video) at `media.watchingfromorbit.com`.
 - R2 free tier: 10 GB storage, 1M writes and 10M reads a month, no charge for downloads. Cloudflare asks for a card the first time (verification). The free `r2.dev` address is rate-limited and meant for testing; use the custom domain.
 - GitHub Pages limits: 100 MB per file, 1 GB published site, soft 100 GB/month bandwidth. Fine for photos and a few short compressed clips; R2 for anything bigger.
-- Status: not set up yet. Steps: Cloudflare account, check and buy the domain, create R2 bucket `watchingfromorbit-media`, then connect the domain to the bucket and point GitHub Pages at the main domain.
+- Status: set up 2026-11-17. Domain `watchingfromorbit.com` at Cloudflare (auto-renew on). DNS: four A records for `@` (185.199.108.153, .109, .110, .111) and a CNAME `www` to `allenambition.github.io`, all DNS only, which GitHub needs to issue the HTTPS certificate. R2 bucket `watchingfromorbit-media` at `media.watchingfromorbit.com`, minimum TLS 1.2.
+- Adding a file: upload it in Cloudflare (R2, then the bucket, then Upload), keeping folders tidy (`audio/`, `video/`). Its address is `https://media.watchingfromorbit.com/<folder>/<file>`, which goes in `content.json`.
 
 ## PS5 clips
 
