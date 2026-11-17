@@ -730,6 +730,9 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   // The room covers the window at 16:9. panX is 0 at the left edge of the picture, 1 at the right edge,
   // and survives resizes, so toolbars sliding in and out don't throw you back to the middle.
   let panX = 0.5;
+  // the room picture's own shape (width / height); 16:9 until a photo loads
+  let roomAR = 16/9;
+  ['photo-on','photo-off'].forEach(id => { const im = $('#'+id); if(!im) return; const set = () => { if(im.naturalWidth){ roomAR = im.naturalWidth / im.naturalHeight; fitRoom(); } }; if(im.complete) set(); im.addEventListener('load', set); });
   const span = () => Math.max(0, room.offsetWidth - rw.clientWidth);
   function place(){ room.style.left = (-span() * panX) + 'px'; fitTags(); }
   // keep each label over the visible part of its object, never past the screen edge
@@ -744,7 +747,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     });
   }
   function fitRoom(){
-    const vw=rw.clientWidth, vh=rw.clientHeight; const W=Math.max(vw, vh*16/9), H=W*9/16;
+    const vw=rw.clientWidth, vh=rw.clientHeight; const W=Math.max(vw, vh*roomAR), H=W/roomAR;
     room.style.width=W+'px'; room.style.height=H+'px'; room.style.top=((vh-H)/2)+'px'; place();
   }
   new ResizeObserver(fitRoom).observe(rw); fitRoom();
