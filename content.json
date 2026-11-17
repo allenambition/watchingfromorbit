@@ -38,22 +38,70 @@
   "closet": [],
   "places": [
     {
+      "id": "italy",
+      "name": "Italy",
+      "subtitle": "Rome, Florence and Tuscany",
+      "country": "Italy",
+      "when": "Summer 2025",
+      "lat": 42.9,
+      "lon": 11.9,
+      "note": "First Italy trip was everything. It’s easy to fall in love with the culture and history here – it truly feels like you’re in conversation with some of the greatest minds that have ever walked the Earth. I also had some of the best food of my life…but the best pizza is still somewhere in Chicago 😉",
+      "cover": {
+        "src": "img/travel/italy/leonardo.jpg",
+        "caption": "Leonardo’s Adoration of the Magi, Uffizi"
+      },
+      "photos": [
+        {
+          "src": "img/travel/italy/colosseum.jpg",
+          "caption": "The Colosseum, Rome"
+        },
+        {
+          "src": "img/travel/italy/pantheon.jpg",
+          "caption": "The Pantheon, Rome"
+        },
+        {
+          "src": "img/travel/italy/uffizi.jpg",
+          "caption": "Uffizi Gallery, Florence"
+        },
+        {
+          "src": "img/travel/italy/aurelius.jpg",
+          "caption": "Marcus Aurelius"
+        },
+        {
+          "src": "img/travel/italy/painting.jpg"
+        },
+        {
+          "src": "img/travel/italy/brancacci.jpg",
+          "caption": "Brancacci Chapel, Florence"
+        },
+        {
+          "src": "img/travel/italy/gilli.jpg",
+          "caption": "Caffè Gilli, Florence"
+        },
+        {
+          "src": "img/travel/italy/fattore.jpg",
+          "caption": "Trattoria Antico Fattore, Florence"
+        },
+        {
+          "src": "img/travel/italy/dessert.jpg"
+        },
+        {
+          "src": "img/travel/italy/steak.jpg"
+        },
+        {
+          "src": "img/travel/italy/doorway.jpg"
+        }
+      ]
+    },
+    {
       "name": "Chicago",
       "country": "Illinois",
       "when": null,
       "lat": 41.8781,
       "lon": -87.6298,
       "note": "Home.",
-      "photos": []
-    },
-    {
-      "name": "Florence",
-      "country": "Italy",
-      "when": null,
-      "lat": 43.7696,
-      "lon": 11.2558,
-      "note": "",
-      "photos": []
+      "photos": [],
+      "id": "chicago"
     },
     {
       "name": "Mexico City",
@@ -62,7 +110,8 @@
       "lat": 19.4326,
       "lon": -99.1332,
       "note": "",
-      "photos": []
+      "photos": [],
+      "id": "mexico-city"
     },
     {
       "name": "New Orleans",
@@ -71,7 +120,8 @@
       "lat": 29.9511,
       "lon": -90.0715,
       "note": "",
-      "photos": []
+      "photos": [],
+      "id": "new-orleans"
     },
     {
       "name": "Houston",
@@ -80,7 +130,8 @@
       "lat": 29.7604,
       "lon": -95.3698,
       "note": "",
-      "photos": []
+      "photos": [],
+      "id": "houston"
     }
   ],
   "hotspots": {
@@ -164,7 +215,10 @@
     "text": ""
   },
   "_places_help": {
-    "photos": "List of \"img/x.jpg\" strings, or objects {\"src\":\"img/x.jpg\",\"caption\":\"...\"}"
+    "id": "short name used in links: yoursite/#italy",
+    "subtitle": "line under the title, e.g. the cities",
+    "cover": "the lead photo; first photo if empty",
+    "photos": "list of {\"src\":\"img/travel/x/name.jpg\",\"caption\":\"optional\"}; a smaller copy named name-sm.jpg is used in the grid if it exists"
   },
   "timezone": "America/Chicago",
   "scenes": {

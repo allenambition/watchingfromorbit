@@ -300,6 +300,72 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .drawer .panel{border-radius:0}
 }
 
+
+/* ---------- globe view ---------- */
+.drawer.full #globe .globe-wrap{display:block;max-width:none}
+.globe-col{display:flex;flex-direction:column;align-items:center}
+.drawer.full #globe .globe-stage{max-width:min(620px,82vw,62vh)}
+#globe > .prose{text-align:center;margin:0 auto}
+.pins{justify-content:center;margin-top:26px;font-style:normal;font-size:14px;letter-spacing:.04em}
+.pins button{padding:6px 2px}
+.pin-tip{position:absolute;pointer-events:none;transform:translate(-50%,calc(-100% - 12px));white-space:nowrap;font-size:13px;letter-spacing:.03em;
+  padding:5px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;opacity:0;transition:opacity .2s}
+.pin-tip.on{opacity:1}
+#globe-msg:empty{display:none}
+
+/* ---------- destination journal ---------- */
+.journal{position:fixed;inset:0;z-index:30;background:var(--bg);color:var(--ink);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s linear .5s,background-color var(--t),color var(--t)}
+.journal.open{opacity:1;visibility:visible;transition:opacity .5s ease,background-color var(--t),color var(--t)}
+.j-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;gap:16px;padding:16px clamp(18px,4vw,48px) 22px;
+  font-size:14px;letter-spacing:.04em;background:linear-gradient(var(--bg) 55%,transparent);transition:background var(--t)}
+.j-bar button{padding:6px 0;opacity:.8}.j-bar button:hover,.j-bar button:focus-visible{opacity:1}
+.j-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:end;max-width:1240px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
+.j-head.textonly{grid-template-columns:minmax(0,1fr);max-width:760px;padding-top:12vh}
+.j-lead{margin:0}
+.j-lead button{display:block;width:100%;padding:0;cursor:zoom-in}
+.j-lead img{display:block;width:100%;height:min(80vh,820px);object-fit:cover;background:var(--bg-2)}
+.j-text{padding-bottom:1vh}
+.j-text h2{font-family:var(--display);font-weight:400;font-size:clamp(52px,7.5vw,112px);line-height:.92;letter-spacing:-.01em;margin:0 0 16px}
+.j-meta{margin:0 0 30px;font-size:14px;letter-spacing:.06em;color:var(--mute);transition:color var(--t)}
+.j-note{font-size:clamp(18px,1.45vw,20px);line-height:1.75;max-width:44ch}
+.j-note p{margin:0 0 1em}
+.j-empty{color:var(--mute);font-style:italic}
+.j-gallery{max-width:1240px;margin:clamp(72px,11vw,150px) auto 0;padding:0 clamp(18px,4vw,48px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(22px,3vw,40px) clamp(14px,2vw,26px);align-items:start}
+.j-gallery figure{margin:0}
+.j-gallery button{display:block;width:100%;padding:0;cursor:zoom-in}
+.j-gallery img{display:block;width:100%;height:auto;background:var(--bg-2)}
+.j-gallery figcaption,.j-lead figcaption{margin-top:9px;font-size:13px;letter-spacing:.02em;color:var(--mute);transition:color var(--t)}
+.j-writing{max-width:62ch;margin:clamp(72px,10vw,130px) auto 0;padding:0 clamp(18px,4vw,48px)}
+.j-writing h3{font-family:var(--display);font-weight:400;font-size:clamp(30px,3.4vw,42px);line-height:1.1;margin:0 0 6px}
+.j-writing .sub{color:var(--mute);font-size:14px;letter-spacing:.04em;margin-bottom:22px}
+.j-writing p{font-size:19px;line-height:1.75;margin:0 0 1.1em}
+.j-writing article+article,.j-writing .reflection{margin-top:64px}
+.j-foot{display:flex;justify-content:center;gap:32px;padding:clamp(80px,12vw,160px) 18px 64px;font-size:14px;letter-spacing:.04em}
+.j-foot button{padding:8px 0;opacity:.75;text-decoration:underline;text-underline-offset:.25em;text-decoration-color:var(--mute)}
+.j-foot button:hover{opacity:1}
+@media (max-width:760px){
+  .j-head{grid-template-columns:minmax(0,1fr);gap:28px;padding:0}
+  .j-lead img{height:auto;aspect-ratio:3/4;max-height:78vh}
+  .j-lead figcaption{padding:0 18px}
+  .j-text{padding:0 18px}
+  .j-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px;padding:0 10px}
+  .j-gallery figcaption{font-size:12px;margin-top:6px}
+}
+
+/* ---------- lightbox ---------- */
+.lightbox{position:fixed;inset:0;z-index:40;background:#060608;display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s;touch-action:pan-y}
+.lightbox.open{opacity:1;visibility:visible;transition:opacity .3s}
+.lb-fig{margin:0;display:flex;flex-direction:column;align-items:center;max-width:100vw}
+.lb-fig img{display:block;max-width:94vw;max-height:84vh;max-height:calc(var(--vh,100dvh) * .84);object-fit:contain;user-select:none;-webkit-user-drag:none}
+.lb-fig figcaption{margin-top:12px;color:#d8d2c8;font-size:14px;letter-spacing:.02em;min-height:1.3em;text-align:center;padding:0 18px}
+.lb-close{position:absolute;top:14px;right:clamp(14px,3vw,32px);color:#fff;font-size:14px;letter-spacing:.04em;padding:10px 4px;opacity:.85}
+.lb-count{position:absolute;top:24px;left:clamp(14px,3vw,32px);color:#fff;opacity:.55;font-size:13px;letter-spacing:.06em}
+.lb-prev,.lb-next{position:absolute;top:0;bottom:0;width:22vw;max-width:220px;cursor:pointer}
+.lb-prev{left:0;cursor:w-resize}.lb-next{right:0;cursor:e-resize}
+.lb-prev:focus-visible,.lb-next:focus-visible{outline-offset:-6px}
+
 /* ---------- drawer ---------- */
 .drawer{position:fixed;inset:0;z-index:20;display:none}
 .drawer.open{display:block}
@@ -504,19 +570,30 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   <section id="globe">
     <div class="prose">
       <h2>The globe</h2>
-      <p class="mute">Places I've been. Drag to turn the globe; tap a pin for photos.</p>
+      <p class="mute">Places I've been. Turn the globe and pick a place.</p>
     </div>
     <div class="globe-wrap">
-      <div>
-        <div class="globe-stage" id="stage"><canvas id="gc"></canvas><div class="stand"></div></div>
+      <div class="globe-col">
+        <div class="globe-stage" id="stage"><canvas id="gc"></canvas><div class="pin-tip" id="pin-tip" aria-hidden="true"></div></div>
         <nav class="pins" id="pins" aria-label="Places"></nav>
+        <p class="idle" id="globe-msg"></p>
       </div>
-      <div class="postcard" id="postcard" aria-live="polite"><p class="idle">Tap a pin to see photos from that trip.</p></div>
     </div>
   </section>
 
   </div></div>
 
+  <div class="journal" id="journal" role="dialog" aria-modal="true" aria-label="Destination">
+    <div class="j-bar"><button id="j-globe">Back to the globe</button><button id="j-room">Back to the room</button></div>
+    <article class="j-body" id="j-body"></article>
+  </div>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo">
+    <figure class="lb-fig"><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+    <button class="lb-close" id="lb-close">Close</button>
+    <button class="lb-prev" id="lb-prev" aria-label="Previous photo"></button>
+    <button class="lb-next" id="lb-next" aria-label="Next photo"></button>
+    <div class="lb-count" id="lb-count"></div>
+  </div>
 </main>
 
 <script src="d3.min.js"></script>
@@ -589,7 +666,12 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     $('#room').classList.remove('zoomed'); $('#roomwrap').classList.remove('away');
   }
   $('#close').addEventListener('click', closeDrawer); $('#scrim').addEventListener('click', closeDrawer);
-  document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer(); });
+  document.addEventListener('keydown', e => {
+    if(e.key !== 'Escape') return;
+    if($('#lightbox').classList.contains('open')) return window.__closeLightbox();
+    if($('#journal').classList.contains('open')) return window.__closeJournal();
+    closeDrawer();
+  });
   [['hot-crate','records'],['hot-shelf','readables'],['hot-closet','closet'],['hot-globe','globe']].forEach(([h,id]) => {
     const el = $('#'+h); el.addEventListener('click', () => openDrawer(id));
     el.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDrawer(id); } });
@@ -693,7 +775,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   // typefaces: set in content.json, loaded from Google Fonts
   const F = c.fonts || {};
   const loadFont = (name, axes) => { if(!name) return; const l=document.createElement('link'); l.rel='stylesheet'; l.href='https://fonts.googleapis.com/css2?family='+encodeURIComponent(name).replace(/%20/g,'+')+(axes||'')+'&display=swap'; document.head.appendChild(l); };
-  if(F.display){ loadFont(F.display, ':ital,wght@0,400;1,400'); loadFont(F.display); html.style.setProperty('--display', `"${F.display}",system-ui,sans-serif`); }
+  if(F.display){ loadFont(F.display, ':ital,wght@0,400;1,400'); loadFont(F.display); html.style.setProperty('--display', `"${F.display}",Georgia,"Times New Roman",serif`); }
   if(F.text){ loadFont(F.text, ':ital,wght@0,400;0,500;0,600;1,400;1,500'); loadFont(F.text); html.style.setProperty('--text', `"${F.text}",system-ui,sans-serif`); }
   // scenes: which room pictures to show, chosen by the hour in Chicago
   (function(){
@@ -910,11 +992,11 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   /* ---------- globe ---------- */
   (async function(){
     const places = c.places || [];
-    const stage = $('#stage'), canvas = $('#gc'), pinsNav = $('#pins'), card = $('#postcard');
+    const stage = $('#stage'), canvas = $('#gc'), pinsNav = $('#pins'), card = $('#globe-msg');
     if(!places.length){ $('#globe').querySelector('.globe-wrap').outerHTML = '<p class="empty">No places on the globe yet.</p>'; return; }
-    if(!window.d3){ card.innerHTML = '<p class="idle">The globe can\'t draw: d3.min.js is missing next to index.html.</p>'; return; }
+    if(!window.d3){ card.innerHTML = 'The globe couldn\'t load. Refresh to try again.'; return; }
     let land;
-    try{ land = await (await fetch('land.json')).json(); }catch(e){ card.innerHTML='<p class="idle">land.json is missing next to index.html.</p>'; return; }
+    try{ land = await (await fetch('land.json')).json(); }catch(e){ card.innerHTML='The globe couldn\'t load. Refresh to try again.'; return; }
 
     const ctx = canvas.getContext('2d');
     const proj = d3.geoOrthographic().clipAngle(90);
@@ -954,9 +1036,11 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
         const d = d3.geoDistance([p.lon,p.lat],[-rot[0],-rot[1]]);
         if(d > Math.PI/2 - .02) return;
         const [x,y] = proj([p.lon,p.lat]); const fade = Math.cos(d);
-        ctx.beginPath(); ctx.arc(x,y, active===p ? 6 : 4.2, 0, Math.PI*2);
-        ctx.fillStyle = lit ? '#F2A33A' : '#dfe7ff'; ctx.globalAlpha = .35 + fade*.65; ctx.fill();
-        ctx.lineWidth = 1.5; ctx.strokeStyle = lit ? '#1c1510' : '#0E1424'; ctx.stroke(); ctx.globalAlpha = 1;
+        const full = hasContent(p), rad = active===p ? 6.5 : (full ? 5 : 3.6);
+        ctx.globalAlpha = .35 + fade*.65;
+        if(full){ ctx.beginPath(); ctx.arc(x,y,rad,0,Math.PI*2); ctx.fillStyle = lit ? '#E0A44A' : '#e9eefc'; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = lit ? '#1c1510' : '#0E1424'; ctx.stroke(); }
+        else { ctx.beginPath(); ctx.arc(x,y,rad,0,Math.PI*2); ctx.lineWidth = 1.4; ctx.strokeStyle = lit ? '#E0A44A' : '#c9d3ee'; ctx.stroke(); }
+        ctx.globalAlpha = 1;
       });
     }
     // spin until touched
@@ -980,8 +1064,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     stage.addEventListener('pointerup', e => {
       if(drag && Math.hypot(e.clientX-drag.x, e.clientY-drag.y) < 4){ // a tap: find nearest pin
         const rect = canvas.getBoundingClientRect(); const mx = e.clientX-rect.left, my = e.clientY-rect.top;
-        let best=null, bd=18;
-        places.forEach(p => { if(d3.geoDistance([p.lon,p.lat],[-rot[0],-rot[1]]) > Math.PI/2) return; const [x,y]=proj([p.lon,p.lat]); const d=Math.hypot(x-mx,y-my); if(d<bd){bd=d;best=p;} });
+        const best = nearest(mx, my, e.pointerType === 'mouse' ? 18 : 30);
         if(best) show(best);
       }
       if(drag && performance.now()-drag.pt > 80) vel = 0;
@@ -995,18 +1078,98 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
       (function step(now){ const k=Math.min(1,(now-t0)/900); const e=ease(k);
         let dx = ((to[0]-from[0]+540)%360)-180; rot=[from[0]+dx*e, from[1]+(to[1]-from[1])*e]; draw(); if(k<1) requestAnimationFrame(step); })(t0);
     }
+    // ---- destination journal ----
+    const journal = $('#journal'), jbody = $('#j-body');
+    const pics = p => (p.photos||[]).map(ph => typeof ph==='string' ? {src:ph} : ph);
+    const small = ph => ph.small || ph.src.replace(/(\.[a-z]+)$/i, '-sm$1');
+    const hasContent = p => !!(p.note || (p.photos||[]).length || p.cover || (c.essays||[]).some(e => e.place===(p.id||p.name) || e.place===p.name));
+    const paras = t => String(t||'').split(/\n\s*\n/).filter(Boolean).map(x => `<p>${esc(x)}</p>`).join('');
+    let lbList = [], lbIndex = 0, lastFocus = null;
+
+    function openJournal(p, fromHash){
+      const all = pics(p);
+      const lead = p.cover ? (typeof p.cover==='string' ? {src:p.cover} : p.cover) : all[0];
+      const rest = all.filter(ph => !lead || ph.src !== lead.src);
+      lbList = lead ? [lead, ...rest] : rest;
+      const key = p.id || p.name;
+      const essays = (c.essays||[]).filter(e => e.place===key || e.place===p.name);
+      const refl = (c.reflections||[]).filter(r => r.place===key || r.place===p.name);
+      const meta = [p.subtitle || p.country, p.when].filter(Boolean).join(', ');
+      jbody.innerHTML = `
+        <header class="j-head${lead ? '' : ' textonly'}">
+          ${lead ? `<figure class="j-lead"><button data-i="0" aria-label="View photo"><img src="${esc(lead.src)}" alt="${esc(lead.caption||p.name)}"></button>${lead.caption ? `<figcaption>${esc(lead.caption)}</figcaption>` : ''}</figure>` : ''}
+          <div class="j-text">
+            <h2>${esc(p.name)}</h2>
+            ${meta ? `<p class="j-meta">${esc(meta)}</p>` : ''}
+            ${p.note ? `<div class="j-note">${paras(p.note)}</div>` : (!lead && !essays.length ? '<p class="j-empty">No photos or writing from here yet.</p>' : '')}
+          </div>
+        </header>
+        ${rest.length ? `<section class="j-gallery" aria-label="Photos">${rest.map((ph,i) => `<figure><button data-i="${i+1}" aria-label="View photo${ph.caption ? ': '+esc(ph.caption) : ''}"><img src="${esc(small(ph))}" alt="${esc(ph.caption||p.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${esc(ph.src)}'"></button>${ph.caption ? `<figcaption>${esc(ph.caption)}</figcaption>` : ''}</figure>`).join('')}</section>` : ''}
+        ${essays.length || refl.length ? `<section class="j-writing">${essays.map(e => `<article><h3>${esc(e.title)}</h3><div class="sub">${esc([e.subtitle,e.date].filter(Boolean).join(', '))}</div>${paras(e.body)}</article>`).join('')}${refl.map(r => `<div class="reflection"><div class="sub">${esc([r.title,r.date].filter(Boolean).join(', '))}</div>${paras(r.text)}</div>`).join('')}</section>` : ''}
+        <nav class="j-foot"><button data-go="globe">Back to the globe</button><button data-go="room">Back to the room</button></nav>`;
+      lastFocus = document.activeElement;
+      journal.scrollTop = 0; journal.classList.add('open');
+      if(!matchMedia('(hover: none)').matches) setTimeout(() => $('#j-globe').focus({preventScroll:true}), 50);
+      if(!fromHash && p.id) history.replaceState(null, '', '#' + p.id);
+    }
+    function closeJournal(){
+      journal.classList.remove('open');
+      if(location.hash) history.replaceState(null, '', location.pathname + location.search);
+      if(lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+    }
+    window.__closeJournal = closeJournal;
+    $('#j-globe').addEventListener('click', closeJournal);
+    $('#j-room').addEventListener('click', () => { closeJournal(); closeDrawer(); });
+    jbody.addEventListener('click', e => {
+      const go = e.target.closest('[data-go]'); if(go){ closeJournal(); if(go.dataset.go==='room') closeDrawer(); return; }
+      const ph = e.target.closest('[data-i]'); if(ph) openLightbox(+ph.dataset.i);
+    });
+
+    // ---- lightbox ----
+    const lb = $('#lightbox'), lbImg = $('#lb-img');
+    function lbShow(i){
+      lbIndex = (i + lbList.length) % lbList.length; const ph = lbList[lbIndex];
+      lbImg.src = ph.src; lbImg.alt = ph.caption || ''; $('#lb-cap').textContent = ph.caption || '';
+      $('#lb-count').textContent = lbList.length > 1 ? `${lbIndex+1} / ${lbList.length}` : '';
+      const nx = lbList[(lbIndex+1) % lbList.length]; if(nx){ const im = new Image(); im.src = nx.src; }
+    }
+    function openLightbox(i){ if(!lbList.length) return; lbShow(i); lb.classList.add('open'); if(!matchMedia('(hover: none)').matches) $('#lb-close').focus({preventScroll:true}); }
+    function closeLightbox(){ lb.classList.remove('open'); lbImg.removeAttribute('src'); }
+    window.__closeLightbox = closeLightbox;
+    $('#lb-close').addEventListener('click', closeLightbox);
+    $('#lb-prev').addEventListener('click', () => lbShow(lbIndex-1));
+    $('#lb-next').addEventListener('click', () => lbShow(lbIndex+1));
+    lb.addEventListener('click', e => { if(e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown', e => { if(!lb.classList.contains('open')) return; if(e.key==='ArrowLeft') lbShow(lbIndex-1); if(e.key==='ArrowRight') lbShow(lbIndex+1); });
+    let sw = null;
+    lb.addEventListener('pointerdown', e => { sw = {x:e.clientX, y:e.clientY}; });
+    lb.addEventListener('pointerup', e => { if(!sw) return; const dx = e.clientX-sw.x, dy = e.clientY-sw.y; sw = null;
+      if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) lbShow(lbIndex + (dx < 0 ? 1 : -1)); });
+
+    // ---- picking a place: the globe turns to it, then the journal opens ----
     function show(p){
       active = p; flyTo(p);
       pinsNav.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.n===p.name));
-      const pics = (p.photos||[]).map(ph => typeof ph==='string' ? {src:ph} : ph);
-      const photos = pics.map(ph => `<figure><img src="${esc(ph.src)}" alt="${esc(ph.caption||p.name)}" loading="lazy">${ph.caption ? `<figcaption>${esc(ph.caption)}</figcaption>` : ''}</figure>`).join('') || '<div class="nophoto">No photos for this place yet.</div>';
-      const essays = (c.essays||[]).filter(e => e.place===p.name).map(e => `<article class="essay"><h4>${esc(e.title)}</h4><div class="sub">${esc([e.subtitle,e.date].filter(Boolean).join(' · '))}</div>${String(e.body||'').split(/\n\s*\n/).map(x => `<p>${esc(x)}</p>`).join('')}</article>`).join('');
-      const refl = (c.reflections||[]).filter(r => r.place===p.name).map(r => `<div class="reflection"><div class="d">${esc([r.title,r.date].filter(Boolean).join(' · '))}</div>${esc(r.text||'')}</div>`).join('');
-      card.innerHTML = `<h3>${esc(p.name)}</h3><div class="mute">${esc([p.country,p.when].filter(Boolean).join(', '))}</div><div class="note">${esc(p.note||'')}</div><div class="photos">${photos}</div>${essays}${refl}`;
-      if(window.innerWidth<820) card.scrollIntoView({behavior:'smooth',block:'nearest'});
+      setTimeout(() => openJournal(p), matchMedia('(prefers-reduced-motion:reduce)').matches ? 0 : 850);
     }
-    places.forEach(p => { const b=document.createElement('button'); b.textContent=p.name; b.dataset.n=p.name; b.setAttribute('aria-pressed','false'); b.addEventListener('click',()=>show(p)); pinsNav.appendChild(b); });
+    // hover a pin to see its name (mouse); a tap goes straight in
+    const tip = $('#pin-tip');
+    function nearest(mx, my, within){
+      let best = null, bd = within;
+      places.forEach(p => { if(d3.geoDistance([p.lon,p.lat],[-rot[0],-rot[1]]) > Math.PI/2) return; const [x,y] = proj([p.lon,p.lat]); const d = Math.hypot(x-mx, y-my); if(d < bd){ bd = d; best = p; } });
+      return best;
+    }
+    stage.addEventListener('pointermove', e => {
+      if(drag || e.pointerType !== 'mouse') return;
+      const r = canvas.getBoundingClientRect(), p = nearest(e.clientX-r.left, e.clientY-r.top, 14);
+      if(p){ const [x,y] = proj([p.lon,p.lat]); tip.textContent = [p.name, p.subtitle || p.country].filter(Boolean).join(', '); tip.style.left = x+'px'; tip.style.top = y+'px'; tip.classList.add('on'); stage.style.cursor = 'pointer'; }
+      else { tip.classList.remove('on'); stage.style.cursor = ''; }
+    });
+    stage.addEventListener('pointerleave', () => tip.classList.remove('on'));
+    places.forEach(p => { const b = document.createElement('button'); b.textContent = p.name; b.dataset.n = p.name; b.setAttribute('aria-pressed','false'); b.addEventListener('click', () => show(p)); pinsNav.appendChild(b); });
     new ResizeObserver(resize).observe(stage); resize();
+    const fromLink = location.hash && places.find(p => p.id && '#'+p.id === location.hash);
+    if(fromLink){ setLit(true, true); openDrawer('globe'); active = fromLink; rot = [-fromLink.lon, -fromLink.lat*0.6]; spinning = false; setTimeout(() => openJournal(fromLink, true), 700); }
   })();
 })();
 </script>

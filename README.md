@@ -31,27 +31,38 @@ Open `content.json` in any text editor, copy an existing entry in the right list
 
 ### A travel destination (`places`)
 
+Each destination is one pin on the globe and one page. Italy is the finished example to copy.
+
 ```json
 {
-  "name": "Mexico City",
-  "country": "Mexico",
-  "when": "January 2026",
-  "lat": 19.4326,
-  "lon": -99.1332,
-  "note": "One or two sentences about the trip.",
+  "id": "italy",
+  "name": "Italy",
+  "subtitle": "Rome, Florence and Tuscany",
+  "country": "Italy",
+  "when": "Summer 2025",
+  "lat": 42.9,
+  "lon": 11.9,
+  "note": "What you want to say about the trip. Blank lines start new paragraphs.",
+  "cover": { "src": "img/travel/italy/leonardo.jpg", "caption": "Optional caption" },
   "photos": [
-    { "src": "img/cdmx-1.jpg", "caption": "Optional caption" },
-    "img/cdmx-2.jpg"
+    { "src": "img/travel/italy/colosseum.jpg", "caption": "The Colosseum, Rome" },
+    { "src": "img/travel/italy/steak.jpg" }
   ]
 }
 ```
 
-The pin appears on the globe automatically. Get `lat` and `lon` by right-clicking the place in Google Maps; the first line is the coordinates. Longitude is negative in the Americas.
+- `id` is used in links: `allenambition.github.io/watchingfromorbit/#italy` opens straight to that page. Lowercase, no spaces.
+- `cover` is the large lead photo. Leave it out and the first photo leads.
+- Put each trip's photos in their own folder, `img/travel/<id>/`. For each photo, also save a smaller copy with `-sm` added to the name (`colosseum-sm.jpg`, about 900 px on the long side). The grid loads the small copy and the full one opens when tapped. If there's no small copy, the full one is used.
+- Remove location data from photos before adding them (export from Photos with "Include location" off, or ask Claude to prepare them).
+- One pin per trip, not per city, when the cities are close together. At globe size, Rome and Florence are the same spot.
+- Pins with photos or writing are drawn solid; pins without anything yet are drawn as rings.
+- Get `lat` and `lon` by right-clicking the place in Google Maps; the first line is the coordinates. Longitude is negative in the Americas.
 
-Longer writing tied to a place goes in `essays` or `reflections`, with `place` set to the destination's `name`:
+Longer writing tied to a trip goes in `essays` or `reflections`, with `place` set to the destination's `id`. It appears below the photos:
 
 ```json
-{ "title": "", "subtitle": "", "date": "", "place": "Mexico City", "body": "Paragraphs separated by a blank line." }
+{ "title": "", "subtitle": "", "date": "", "place": "italy", "body": "Paragraphs separated by a blank line." }
 ```
 
 ### A record (`records`)
@@ -118,7 +129,7 @@ The room is a photograph (generated image). The clickable areas are invisible bo
 
 - The room fills the window at 16:9 and is cropped to fit. On phones it is wider than the screen; visitors swipe sideways. A swipe never opens an object, even if it starts on one; a tap does.
 - First visit on a phone: after the light comes on, the view drifts to the globe, across to the wardrobe and back, with labels showing. It runs once. Tapping empty parts of the room shows the labels again. On desktop, labels fade in once and then appear on hover.
-- The globe opens full-screen after the camera zooms into it. Drag to spin it, scroll or pinch to zoom, tap a pin for that place.
+- The globe opens full-screen after the camera zooms into it. Drag to spin it, scroll or pinch to zoom. Hovering a pin shows its name; clicking a pin or a place name turns the globe to it and opens that destination's page. Photos open full-screen; swipe or use the arrow keys between them. Esc steps back one layer at a time.
 - Apple Music and YouTube players work on the live site. They're blocked inside Claude's artifact preview, where a link shows instead.
 
 ## Deploying
@@ -129,5 +140,6 @@ The site is hosted on GitHub Pages from this repository: Settings → Pages → 
 
 - Text on the site follows a plain-writing guide: specific, no hype words, no "not just X but Y", no cheerleading, no fragments for effect.
 - Decisions already made: no glowing or pulsing hints on objects; the room is the page, with no conventional menu or scrolling site underneath; other people's music is embedded, never hosted.
-- Next planned work: one complete travel destination with real photos and writing, used as the design reference for the other collections. Then a real lights-off image and a dusk scene.
+- The Italy page is the design reference for the other collections: one large lead photo, the title in Bodoni Moda, a short note, then the photos in a plain grid, with nothing decorative around them.
+- Next planned work: a real lights-off image and a dusk scene; then records and the wardrobe in the same restrained style as the Italy page.
 - Ideas parked for later: wardrobe doors that open, flipping through record sleeves, a cat that wanders through the room.
