@@ -366,6 +366,34 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .lb-prev{left:0;cursor:w-resize}.lb-next{right:0;cursor:e-resize}
 .lb-prev:focus-visible,.lb-next:focus-visible{outline-offset:-6px}
 
+
+/* ---------- deck: the player that keeps going while you look around ---------- */
+.deck{position:fixed;z-index:35;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px);width:min(380px,calc(100vw - 24px));
+  background:rgba(14,12,12,.92);color:#f3ece2;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);overflow:hidden}
+.deck[hidden],.deck [hidden]{display:none !important}
+.deck-bar{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 14px;min-height:52px}
+.deck-meta{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.deck-title{font-family:var(--display);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-sub{font-size:12px;letter-spacing:.03em;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-btn{flex:0 0 auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#f3ece2}
+.deck-btn svg{width:20px;height:20px;fill:currentColor}
+.deck-play{background:rgba(255,255,255,.1)}
+.deck-play .i-pause{display:none}.deck.playing .deck-play .i-pause{display:block}.deck.playing .deck-play .i-play{display:none}
+.deck-text{flex:0 0 auto;font-size:13px;letter-spacing:.04em;opacity:.7;padding:8px 2px}
+.deck-text:hover,.deck-btn:hover{opacity:1}
+.deck-progress{height:3px;background:rgba(255,255,255,.12);cursor:pointer;margin:0 14px 10px}
+.deck-progress div{height:100%;width:0;background:#E0A44A}
+.deck-embed iframe{display:block;width:100%;height:175px;border:0;background:transparent}
+.deck.min .deck-embed{position:absolute;left:-10000px;top:0;width:360px}
+.deck-note{font-size:12px;opacity:.55;padding:0 14px 10px;margin:0}
+.deck.min .deck-note{display:none}
+@media (max-width:760px){
+  .deck{left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:auto}
+  html.deck-on .dock{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+}
+.play-record{display:inline-block;margin-top:18px;padding:10px 18px;border:1px solid var(--line);border-radius:999px;font-size:14px;letter-spacing:.04em;transition:border-color .2s}
+.play-record:hover,.play-record:focus-visible{border-color:var(--glow)}
+
 /* ---------- drawer ---------- */
 .drawer{position:fixed;inset:0;z-index:20;display:none}
 .drawer.open{display:block}
@@ -594,6 +622,18 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     <button class="lb-next" id="lb-next" aria-label="Next photo"></button>
     <div class="lb-count" id="lb-count"></div>
   </div>
+  <div class="deck" id="deck" role="region" aria-label="Now playing" hidden>
+    <div class="deck-bar">
+      <button class="deck-btn deck-play" id="deck-play" aria-label="Play" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+      <button class="deck-btn deck-next" id="deck-next" aria-label="Next track" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5l9 7-9 7zM16 5h2v14h-2z"/></svg></button>
+      <div class="deck-meta"><span class="deck-title" id="deck-title"></span><span class="deck-sub" id="deck-sub"></span></div>
+      <button class="deck-text" id="deck-toggle" hidden>Hide</button>
+      <button class="deck-text" id="deck-stop" aria-label="Stop and close the player">Close</button>
+    </div>
+    <div class="deck-progress" id="deck-progress" hidden><div id="deck-fill"></div></div>
+    <div class="deck-embed" id="deck-embed"></div>
+    <audio id="deck-audio" preload="none"></audio>
+  </div>
 </main>
 
 <script src="d3.min.js"></script>
@@ -634,7 +674,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
       if(!seen){ const tags=[...document.querySelectorAll('.spot:not(.spot-lamp) .tag')]; tags.forEach((t,i) => { setTimeout(() => t.classList.add('intro'), 900 + i*350); setTimeout(() => t.classList.remove('intro'), 900 + i*350 + 2200); }); try{ localStorage.setItem('introduced','1'); }catch(e){} } }
     const po=$('#photo-off'), pn=$('#photo-on'); if(po) po.classList.toggle('show', !on); if(pn) pn.classList.toggle('show', on);
     $('#skypane').setAttribute('fill', on ? 'url(#g-sky-lit)' : 'url(#g-sky)');
-    if(!silent) click(on);
+    if(!silent){ click(on); if(on && window.__track) window.__track('lights-on'); }
     try{ localStorage.setItem('lamp', on ? 'on' : 'off'); }catch(e){}
   }
   const lampEl = $('#hot-lamp');
@@ -646,6 +686,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
 /* ---------- drawer ---------- */
   const drawer = $('#drawer'), panel = $('#panel');
   function openDrawer(id){
+    if(window.__track) window.__track('open/' + ({records:'records', readables:'shelf', closet:'closet', globe:'globe'}[id] || id));
     drawer.querySelectorAll('section').forEach(x => x.classList.toggle('show', x.id===id));
     const full = id==='globe';
     drawer.classList.toggle('full', full);
@@ -788,6 +829,82 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     const go=()=>{ $('#room').classList.add('photo-mode'); const on=html.classList.contains('lit'); po.classList.toggle('show',!on); pn.classList.toggle('show',on); };
     let loaded=0; [[pn,sc.on],[po,sc.off||sc.on]].forEach(([im,src]) => { im.addEventListener('load', () => { if(++loaded===1) go(); }); im.addEventListener('error', () => im.remove()); im.src = src; });
   })();
+
+  /* ---------- visitor counting (GoatCounter; off until content.json has a code) ---------- */
+  function slug(t){ return String(t||'').toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g,'').trim().replace(/[\s_]+/g,'-').slice(0,60) || 'untitled'; }
+  function track(name){ try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: name, title: name, event: true }); }catch(e){} }
+  window.__track = track;
+  (function(){
+    const code = c.analytics && c.analytics.goatcounter; if(!code) return;
+    const sc = document.createElement('script'); sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
+    sc.dataset.goatcounter = `https://${code}.goatcounter.com/count`; document.head.appendChild(sc);
+  })();
+
+  /* ---------- deck ---------- */
+  (function(){
+    const deck = $('#deck'), audio = $('#deck-audio'), embedBox = $('#deck-embed');
+    let rec = null, tracks = [], ti = 0;
+    const show = (el, on) => { el.hidden = !on; };
+    const ytId = u => { const m = String(u||'').match(/(?:youtu\.be\/|v=|\/shorts\/|\/embed\/)([\w-]{11})/); return m ? m[1] : null; };
+    function embedSrc(r){
+      if(r.embed) return r.embed;
+      if(r.apple) return r.apple.replace('https://music.apple.com', 'https://embed.music.apple.com');
+      if(r.youtube){ const list = String(r.youtube).match(/[?&]list=([\w-]+)/); if(list) return `https://www.youtube-nocookie.com/embed/videoseries?list=${list[1]}`; const id = ytId(r.youtube); if(id) return `https://www.youtube-nocookie.com/embed/${id}`; }
+      if(r.soundcloud) return 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(r.soundcloud) + '&color=%23e0a44a&visual=false';
+      return null;
+    }
+    function stop(){
+      audio.pause(); audio.removeAttribute('src'); embedBox.innerHTML = ''; deck.hidden = true; deck.classList.remove('playing','min');
+      html.classList.remove('deck-on'); rec = null; if('mediaSession' in navigator) navigator.mediaSession.metadata = null;
+    }
+    function setTrack(i, play){
+      ti = (i + tracks.length) % tracks.length; const t = tracks[ti];
+      audio.src = t.file; $('#deck-title').textContent = t.title || rec.title;
+      $('#deck-sub').textContent = [tracks.length > 1 ? `${rec.title}, ${ti+1} of ${tracks.length}` : rec.title !== t.title ? rec.title : '', t.by || rec.by].filter(Boolean).join(' · ');
+      if('mediaSession' in navigator && window.MediaMetadata){
+        navigator.mediaSession.metadata = new MediaMetadata({ title: t.title || rec.title, artist: t.by || rec.by || '', album: rec.title, artwork: rec.cover ? [{src: new URL(rec.cover, location.href).href}] : [] });
+      }
+      if(play) audio.play().catch(() => {});
+    }
+    function load(r){
+      if(!r) return; stop(); rec = r; deck.hidden = false; html.classList.add('deck-on');
+      tracks = (r.tracks || (r.file ? [{title:r.title, file:r.file}] : [])).filter(t => t.file);
+      track('play/' + slug(r.title));
+      if(tracks.length){
+        show($('#deck-play'), true); show($('#deck-next'), tracks.length > 1); show($('#deck-progress'), true); show($('#deck-toggle'), false);
+        setTrack(0, true);
+      } else {
+        const src = embedSrc(r);
+        show($('#deck-play'), false); show($('#deck-next'), false); show($('#deck-progress'), false); show($('#deck-toggle'), !!src);
+        $('#deck-title').textContent = r.title; $('#deck-sub').textContent = src ? 'Press play in the player. It keeps going while you look around.' : 'No player for this record yet.';
+        if(src){
+          embedBox.innerHTML = `<iframe title="${esc(r.title)}" src="${esc(src)}" allow="autoplay *; encrypted-media *; clipboard-write" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" loading="eager"></iframe>`;
+        }
+        $('#deck-toggle').textContent = 'Hide';
+      }
+    }
+    $('#deck-stop').addEventListener('click', stop);
+    $('#deck-toggle').addEventListener('click', () => {
+      const min = deck.classList.toggle('min'); $('#deck-toggle').textContent = min ? 'Show' : 'Hide';
+      if(min && rec) $('#deck-sub').textContent = rec.by || 'Playing in the background';
+    });
+    $('#deck-play').addEventListener('click', () => audio.paused ? audio.play().catch(()=>{}) : audio.pause());
+    $('#deck-next').addEventListener('click', () => setTrack(ti+1, true));
+    audio.addEventListener('play', () => deck.classList.add('playing'));
+    audio.addEventListener('pause', () => deck.classList.remove('playing'));
+    audio.addEventListener('ended', () => { if(ti < tracks.length-1) setTrack(ti+1, true); });
+    audio.addEventListener('timeupdate', () => { $('#deck-fill').style.width = (audio.duration ? 100*audio.currentTime/audio.duration : 0) + '%'; });
+    $('#deck-progress').addEventListener('click', e => { if(!audio.duration) return; const r = e.currentTarget.getBoundingClientRect(); audio.currentTime = audio.duration * (e.clientX - r.left) / r.width; });
+    if('mediaSession' in navigator){
+      try{
+        navigator.mediaSession.setActionHandler('play', () => audio.play());
+        navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+        navigator.mediaSession.setActionHandler('nexttrack', () => setTrack(ti+1, true));
+        navigator.mediaSession.setActionHandler('previoustrack', () => setTrack(ti-1, true));
+      }catch(e){}
+    }
+    window.__deck = { load, stop };
+  })();
   window.__sound = c.sound || 'chain';
   (function(){
     const a = c.ambient && c.ambient.src; if(!a) return;
@@ -919,27 +1036,16 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     if(r.cover) b.style.backgroundImage = `url("${r.cover}")`;
     b.innerHTML = r.cover ? '' : `<span class="t">${esc(r.title)}</span><span class="b">${esc(r.by||'')}</span>`;
     b.setAttribute('aria-label', r.title);
-    b.addEventListener('click', () => toggle(turntable, crate, b, () => {
-      const embed = r.apple ? r.apple.replace('https://music.apple.com','https://embed.music.apple.com') : null;
-      return `
+    b.addEventListener('click', () => toggle(turntable, crate, b, () => `
         <div class="note">${esc(r.note||'')}</div>
-        <div class="player ${embed?'':'failed'}" id="player">
-          ${embed ? `<iframe title="${esc(r.title)} on Apple Music" src="${esc(embed)}" allow="autoplay *; encrypted-media *" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"></iframe>` : ''}
-          ${embed ? '<div class="loading">Loading the player.</div>' : ''}
-          <div class="fallback">${embed ? "The player can't load on this page." : 'No link on this record yet.'}
-            ${r.apple ? `<a class="open-link" href="${esc(r.apple)}" target="_blank" rel="noopener">Open in Apple Music</a>` : ''}</div>
-          ${embed ? `<a class="open-link" href="${esc(r.apple)}" target="_blank" rel="noopener">Open in Apple Music</a>` : ''}
-        </div>`;
-    }));
-    b.addEventListener('click', () => {
-      const p = $('#player'), f = p && p.querySelector('iframe');
-      if(!f) return;
-      let ok=false;
-      f.addEventListener('load', () => { ok=true; f.classList.add('ready'); });
-      setTimeout(() => { if(!ok) p.classList.add('failed'); }, 4000);
-    });
+        <div>
+          <button class="play-record" data-record="${i}">Play</button>
+          ${r.apple ? `<p class="mute" style="font-size:14px;margin-top:14px">Full songs if you're signed in to Apple Music; 30-second previews if not. <a href="${esc(r.apple)}" target="_blank" rel="noopener">Open in Apple Music</a></p>` : ''}
+        </div>`));
     crate.appendChild(b);
   });
+
+  turntable.addEventListener('click', e => { const pb = e.target.closest('[data-record]'); if(pb) window.__deck.load(c.records[+pb.dataset.record]); });
 
   /* ---------- shelf ---------- */
   const shelf = $('#shelf'), pulled = $('#pulled');
@@ -1107,6 +1213,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
         ${rest.length ? `<section class="j-gallery" aria-label="Photos">${rest.map((ph,i) => `<figure><button data-i="${i+1}" aria-label="View photo${ph.caption ? ': '+esc(ph.caption) : ''}"><img src="${esc(small(ph))}" alt="${esc(ph.caption||p.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${esc(ph.src)}'"></button>${ph.caption ? `<figcaption>${esc(ph.caption)}</figcaption>` : ''}</figure>`).join('')}</section>` : ''}
         ${essays.length || refl.length ? `<section class="j-writing">${essays.map(e => `<article><h3>${esc(e.title)}</h3><div class="sub">${esc([e.subtitle,e.date].filter(Boolean).join(', '))}</div>${paras(e.body)}</article>`).join('')}${refl.map(r => `<div class="reflection"><div class="sub">${esc([r.title,r.date].filter(Boolean).join(', '))}</div>${paras(r.text)}</div>`).join('')}</section>` : ''}
         <nav class="j-foot"><button data-go="globe">Back to the globe</button><button data-go="room">Back to the room</button></nav>`;
+      if(window.__track) window.__track('place/' + (p.id || p.name));
       lastFocus = document.activeElement;
       journal.scrollTop = 0; journal.classList.add('open');
       if(!matchMedia('(hover: none)').matches) setTimeout(() => $('#j-globe').focus({preventScroll:true}), 50);

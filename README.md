@@ -67,17 +67,40 @@ Longer writing tied to a trip goes in `essays` or `reflections`, with `place` se
 
 ### A record (`records`)
 
+Choosing a record and pressing Play loads it into the player in the corner, which keeps going while visitors look around the room, open other things, or switch to other browser tabs. "Hide" tucks it away without stopping it.
+
 ```json
 {
   "title": "Brown Liquor & Me",
   "by": "Playlist",
   "note": "Why it's in the collection.",
   "apple": "https://music.apple.com/us/playlist/...",
-  "cover": "img/brown-liquor.jpg"
+  "cover": "img/records/brown-liquor.jpg"
 }
 ```
 
-`apple` is the Share → Copy Link from Apple Music; the page turns it into a player. Other people's music is only ever embedded, never uploaded. `cover` is optional; with a cover, the record also stands on the room's shelves.
+Use one source per record:
+
+| Field | What to paste | Who hears full songs |
+|---|---|---|
+| `apple` | Apple Music share link | Visitors signed in to Apple Music; everyone else gets 30-second previews |
+| `youtube` | YouTube video or playlist link | Everyone (some videos block playing outside YouTube) |
+| `soundcloud` | SoundCloud track or playlist link | Everyone |
+| `embed` | The `src` from another site's embed code (Audiomack, Bandcamp) | Everyone |
+| `file` or `tracks` | Audio files in `audio/` | Everyone |
+
+`file` is one track: `"file": "audio/my-song.mp3"`. `tracks` is several, played in order with a next button:
+
+```json
+"tracks": [
+  { "title": "Song one", "file": "audio/tape/01.mp3", "by": "Aaron Allen" },
+  { "title": "Song two", "file": "audio/tape/02.mp3" }
+]
+```
+
+Only put audio files in this repository that you have the rights to (your own music). Anything in a public GitHub repository can be downloaded by anyone, and copyright takedowns against it count against the whole GitHub account. Other people's music goes in through `youtube`, `soundcloud` or `embed`, from uploads the artist or label made.
+
+`cover` is optional; with a cover, the record also stands on the room's shelves.
 
 ### Something on the shelf (`shelf`)
 
@@ -123,7 +146,8 @@ The room is a photograph (generated image). The clickable areas are invisible bo
 - `title`, `tagline`, `links`: the line of text at the bottom of the room.
 - `fonts`: `display` (titles, notes) and `text` (everything else). Any Google Fonts family name. Currently Bodoni Moda and Jost.
 - `sound`: what the light makes when switched: `chain`, `switch` or `none`.
-- `ambient`: room tone, off until a visitor turns it on. `"synth"` generates it in the browser; a path like `"audio/room.mp3"` plays a file; `null` removes the button.
+- `ambient`: room tone, off until a visitor turns it on. Currently `null` (no sound button). `"synth"` generates one in the browser; a path like `"audio/room.mp3"` plays a recorded loop, which will sound more like the room than the generated one.
+- `analytics.goatcounter`: your GoatCounter code. When set, the site counts page views plus these events: `lights-on`, `open/globe`, `open/records`, `open/shelf`, `open/closet`, `place/<id>` (e.g. `place/italy`), `play/<record>`. They appear in the GoatCounter dashboard alongside page views. `null` turns counting off.
 
 ## How it behaves
 

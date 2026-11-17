@@ -194,9 +194,9 @@
   "sound": "chain",
   "_sound_help": "chain (pull-chain click), switch (wall switch), or none",
   "ambient": {
-    "src": "synth",
+    "src": null,
     "volume": 0.3,
-    "_help": "'synth' makes a quiet room tone in the browser, no file needed. Or a path to a looping file in audio/. null hides the button. Always off until a visitor turns it on."
+    "_help": "null = no room sound. \"synth\" makes one in the browser; or a path to a looping file in audio/. Always off until a visitor turns it on."
   },
   "essays": [],
   "_essays_help": {
@@ -227,5 +227,17 @@
       "on": "img/room-night-on.jpg",
       "off": "img/room-night-off.jpg"
     }
+  },
+  "analytics": {
+    "goatcounter": null,
+    "_help": "Your GoatCounter code (the part before .goatcounter.com). null = no counting."
+  },
+  "_records_help": {
+    "apple": "Apple Music share link",
+    "youtube": "YouTube video or playlist link",
+    "soundcloud": "SoundCloud track or playlist link",
+    "embed": "any other player's embed src (Audiomack, Bandcamp)",
+    "file": "one audio file you have the rights to, e.g. audio/song.mp3",
+    "tracks": "several files: [{\"title\":\"\",\"file\":\"audio/x.mp3\",\"by\":\"\"}]"
   }
 }
