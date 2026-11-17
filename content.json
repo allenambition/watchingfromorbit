@@ -225,7 +225,7 @@
     }
   },
   "analytics": {
-    "goatcounter": null,
+    "goatcounter": "watchingfromorbit",
     "_help": "Your GoatCounter code (the part before .goatcounter.com). null = no counting."
   },
   "_records_help": {
