@@ -175,7 +175,10 @@ html.lit .lamp .hint{opacity:.55}
 .room-wrap{position:relative;width:100vw;height:100vh;height:100dvh;overflow:hidden;scrollbar-width:none}
 .room-wrap::-webkit-scrollbar{display:none}
 .room{position:absolute;left:0;top:0}
-.room svg{width:100%;height:100%;display:block}
+.room svg{width:100%;height:100%;display:block;visibility:hidden}
+.room.svg-fallback svg{visibility:visible}
+.room-wrap{background:#07080c}
+.room .photo{transition:opacity .8s}
 .room .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity var(--t)}
 .room .photo.show{opacity:1}
 .hot{cursor:pointer}
@@ -824,13 +827,13 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   // scenes: which room pictures to show, chosen by the hour in Chicago
   (function(){
     const scenes = c.scenes || {night:{on:'img/room-on.jpg', off:'img/room-off.jpg'}};
-    const names = Object.keys(scenes).filter(n => !n.startsWith('_') && scenes[n] && scenes[n].on); if(!names.length) return;
+    const names = Object.keys(scenes).filter(n => !n.startsWith('_') && scenes[n] && scenes[n].on); if(!names.length){ $('#room').classList.add('svg-fallback'); return; }
     let hour = new Date().getHours();
     try{ hour = parseInt(new Intl.DateTimeFormat('en-US',{hour:'numeric',hour12:false,timeZone:c.timezone||'America/Chicago'}).format(new Date()),10); }catch(e){}
     const pick = names.find(n => { const sc=scenes[n]; if(!sc.hours) return false; const [a,b]=sc.hours; return a<=b ? (hour>=a && hour<b) : (hour>=a || hour<b); }) || names.find(n => !scenes[n].hours) || names[0];
     const sc = scenes[pick]; const po=$('#photo-off'), pn=$('#photo-on');
     const go=()=>{ $('#room').classList.add('photo-mode'); const on=html.classList.contains('lit'); po.classList.toggle('show',!on); pn.classList.toggle('show',on); };
-    let loaded=0; [[pn,sc.on],[po,sc.off||sc.on]].forEach(([im,src]) => { im.addEventListener('load', () => { if(++loaded===1) go(); }); im.addEventListener('error', () => im.remove()); im.src = src; });
+    let loaded=0; [[pn,sc.on],[po,sc.off||sc.on]].forEach(([im,src]) => { im.addEventListener('load', () => { if(++loaded===1) go(); }); im.addEventListener('error', () => { im.remove(); if(!$('#room').classList.contains('photo-mode')) $('#room').classList.add('svg-fallback'); }); im.src = src; });
   })();
 
   /* ---------- visitor counting (GoatCounter; off until content.json has a code) ---------- */
@@ -1182,10 +1185,11 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     stage.addEventListener('pointercancel', () => { drag=null; stage.classList.remove('dragging'); });
 
     function flyTo(p){
-      spinning=false; const from=[...rot], to=[-p.lon, -p.lat*0.6]; const t0=performance.now();
+      spinning=false; rot[0] = ((rot[0] % 360) + 540) % 360 - 180; const from=[...rot], to=[-p.lon, -p.lat*0.6]; const t0=performance.now();
+      const dx = (((to[0]-from[0]) % 360) + 540) % 360 - 180;
       const ease = x => 1-Math.pow(1-x,3);
       (function step(now){ const k=Math.min(1,(now-t0)/900); const e=ease(k);
-        let dx = ((to[0]-from[0]+540)%360)-180; rot=[from[0]+dx*e, from[1]+(to[1]-from[1])*e]; draw(); if(k<1) requestAnimationFrame(step); })(t0);
+        rot=[from[0]+dx*e, from[1]+(to[1]-from[1])*e]; draw(); if(k<1) requestAnimationFrame(step); })(t0);
     }
     // ---- destination journal ----
     const journal = $('#journal'), jbody = $('#j-body');
