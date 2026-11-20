@@ -72,6 +72,30 @@ Rule: only add an object that will get something new at least monthly. An empty 
   - Telescope moves here from the lounge plan. Next lounge panorama: no telescope, an unbranded game console, depth (a lounge chair in the foreground, staggered objects).
 - The doorway between rooms should be a deliberate transition (an airlock or a stairwell up), since the deck is a different world.
 
+### Observation deck: where the image stands (2026-11-20)
+
+Current draft: moon-base cave room, wide window with Earth over the lunar surface; telescope left, terminal desk right, stone table centre, leather chair in the foreground.
+
+Decided:
+- **Earth in the window:** a full disc (not a half-lit phase), in clear black sky with nothing overlapping it, because the live day/night line is drawn on top. Next round: about twice as large (it's about 6% of the width now; on a phone that's a dot).
+- **Telescope:** all essays on this page, including history and power. History doesn't get its own object.
+- **Terminal:** stays; the screen should glow faintly green with some text (it's a monitor that's on, not a hint). Doubles as a light source in a lights-off version.
+- **Doorway back to the lounge:** the round vault hatch on the right wall. Next round: clear of the hanging plant and a bit larger, so it's a usable tap target.
+- **Remove the armillary sphere** (looks clickable, echoes the lounge globe). Keep both lamps; they're the room's light sources.
+- **Widening to 21:9 in Photoshop**, not by regenerating. Prefer the armchair fully in frame first, or accept a half-invented chair.
+
+Tried and dropped:
+- Chessboard (chess as a power symbol is worn out; the board read as a prop and pulled the eye from the window).
+- Star chart: looked right but felt dishonest for a room on the moon.
+
+Open: what sits on the table. It only needs to fill the space quietly and isn't clickable. Leading idea: a survey map of the surrounding crater (same look as the star chart, but true to the place). Others: a tray of labelled rock samples; a typewriter with a page in it (risk: looks clickable); open books and papers. Also consider a smaller slab or the object off-centre so the window stays the focus.
+
+### Messages: planned change
+
+- Rate limit: replace "one per 10 minutes" with "5 per hour per visitor", no gap between messages. Daily cap of 300 stays. Needs the worker code re-pasted in Cloudflare (Workers & Pages, wfo-api, Edit code, Deploy).
+- Add a line under the form before people write: "No links. I read everything before it goes up."
+- Replies or threads don't exist; "unless they're responding to me" would need a reply feature first.
+
 ## Music: stations
 
 - Records hold playlists (Apple Music now, Spotify later). Stations hold uploaded tracks, grouped by theme (first: blog era). A station shuffles; visitors can also play a track now, play it next, or add it to the queue.
