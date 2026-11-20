@@ -2,14 +2,14 @@
 
 Working notes for watchingfromorbit: decisions already made, what's planned, and the prompts and steps worked out along the way. `README.md` explains how the site works and how to add things; this file is the why and the what-next. Update it when a decision changes.
 
-Last updated: 2026-11-17.
+Last updated: 2026-11-20.
 
 ## Where things stand
 
 - Live at https://watchingfromorbit.com/ (GitHub Pages, branch `main`; the domain is registered at Cloudflare with auto-renew, DNS on Cloudflare set to DNS only). The old github.io address forwards there.
 - One room: the observatory lounge (porthole with Chicago skyline, floor globe, bulb, two shelves, console with turntable, wardrobe).
 - Working: light switch, globe with zoom-in (always takes the short way to a place), Italy destination page, records (playlists) and stations (uploaded tracks, shuffle and queue) with a player behind an icon in the corner that keeps playing across the site and in background tabs, the Index (search, everything as text, what's new), content warnings for graphic links, phone swiping, visitor counting.
-- Built but switched off until set up in Cloudflare: the message board and private question box (`worker/`, steps in README under "Messages").
+- Message board and private question box: live since 2026-11-20. Worker `wfo-api` at `api.watchingfromorbit.com`, D1 database `wfo`, admin page at `api.watchingfromorbit.com/admin`. Entry is a line at the top of the Index until the deck's terminal exists.
 - Real content so far: Italy (12 photos and caption), two Apple Music playlists. Shelf and wardrobe are empty. Chicago, Mexico City, New Orleans and Houston are pins with no content yet.
 
 ## Saved versions
