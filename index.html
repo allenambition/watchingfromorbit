@@ -488,6 +488,25 @@ html.radio-on .room-index{right:calc(clamp(18px,3vw,40px) + 68px)}
 .ix-date{display:inline-block;min-width:96px;font-size:13px;color:var(--mute)}
 .ix-count{color:var(--mute);font-size:14px;margin:18px 0 4px}
 
+
+/* ---------- content warnings ---------- */
+.cw{margin:1.4em 0;padding:16px 18px;border:1px solid var(--line);border-left:3px solid #9b3b2e;border-radius:3px;max-width:62ch}
+.cw p{margin:0}
+.cw-label{font-size:12px;letter-spacing:.08em;color:#c7685a}
+.cw-what{margin-top:4px !important;font-size:16px}
+.cw-btn{margin-top:12px;font-size:14px;letter-spacing:.03em;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--ink)}
+.cw-btn:hover,.cw-btn:focus-visible{border-color:#c7685a}
+.cw-dialog{position:fixed;inset:0;z-index:60;background:rgba(4,4,6,.82);display:grid;place-items:center;padding:20px;opacity:0;transition:opacity .2s}
+.cw-dialog[hidden]{display:none}.cw-dialog.open{opacity:1}
+.cw-box{max-width:460px;width:100%;background:#16110f;color:#f3ece2;border-radius:10px;padding:26px 26px 22px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.cw-box h3{font-family:var(--display);font-weight:400;font-size:24px;margin:0 0 10px}
+.cw-box p{margin:0 0 10px;line-height:1.55}
+.cw-fine{font-size:13px;opacity:.6}
+.cw-actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
+.cw-actions button,.cw-actions a{font-size:14px;letter-spacing:.03em;padding:10px 16px;border-radius:999px;text-decoration:none}
+.cw-actions button{color:#f3ece2;border:1px solid rgba(255,255,255,.2)}
+.cw-actions a{background:#9b3b2e;color:#fff}
+
 /* ---------- drawer ---------- */
 .drawer{position:fixed;inset:0;z-index:20;display:none}
 .drawer.open{display:block}
@@ -741,6 +760,14 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     <audio id="deck-audio" preload="metadata"></audio>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="cw-dialog" id="cw-dialog" role="dialog" aria-modal="true" aria-labelledby="cw-h" hidden>
+    <div class="cw-box">
+      <h3 id="cw-h">This link shows graphic content</h3>
+      <p id="cw-text"></p>
+      <p class="cw-fine">It opens on another site, in a new tab. Nothing plays here.</p>
+      <div class="cw-actions"><button id="cw-cancel">Go back</button><a id="cw-open" target="_blank" rel="noopener noreferrer">Open on <span>the other site</span></a></div>
+    </div>
+  </div>
 </main>
 
 <script src="d3.min.js"></script>
@@ -1110,6 +1137,36 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     function enqueue(t){ if(!current) return playNow(t); queue.push(t); if(!station && t._station){ station = t._station; bag = []; } renderQueue(); toast(`Added to queue: ${t.title}`); }
     window.__deck = { load, stop, playStation, playNow, playNext, enqueue, current: () => current };
   })();
+
+  /* ---------- writing: paragraphs, plain links, and links behind a content warning ---------- */
+  // In any note or essay:  [text](https://...)  is a link.
+  // A paragraph that is only  [warning: what it shows](https://...)  becomes a warning; the link appears after the reader confirms.
+  const safeUrl = u => /^https?:\/\//i.test(u) ? u : null;
+  function inline(t){
+    let out = '', last = 0; const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g; let m;
+    while((m = re.exec(t))){ out += esc(t.slice(last, m.index)); const u = safeUrl(m[2]); out += u ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(m[1])}</a>` : esc(m[0]); last = re.lastIndex; }
+    return out + esc(t.slice(last));
+  }
+  window.__rich = t => String(t||'').split(/\n\s*\n/).map(x => x.trim()).filter(Boolean).map(x => {
+    const w = x.match(/^\[warning:\s*([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/i);
+    if(w) return `<div class="cw"><p class="cw-label">Graphic content</p><p class="cw-what">${esc(w[1])}</p><button class="cw-btn" data-cw="${esc(w[2])}" data-cw-what="${esc(w[1])}">Show the link</button></div>`;
+    return `<p>${inline(x)}</p>`;
+  }).join('');
+  (function(){
+    const dlg = $('#cw-dialog'); let lastFocus = null;
+    document.addEventListener('click', e => {
+      const b = e.target.closest('[data-cw]'); if(!b) return;
+      lastFocus = b; $('#cw-text').textContent = b.dataset.cwWhat;
+      const a = $('#cw-open'); a.href = b.dataset.cw; try{ a.querySelector('span').textContent = new URL(b.dataset.cw).hostname.replace(/^www\./,''); }catch(err){}
+      dlg.hidden = false; requestAnimationFrame(() => dlg.classList.add('open')); $('#cw-cancel').focus({preventScroll:true});
+      track('warning/shown');
+    });
+    const close = () => { dlg.classList.remove('open'); setTimeout(() => dlg.hidden = true, 200); if(lastFocus) lastFocus.focus({preventScroll:true}); };
+    $('#cw-cancel').addEventListener('click', close);
+    $('#cw-open').addEventListener('click', () => { track('warning/opened'); setTimeout(close, 50); });
+    dlg.addEventListener('click', e => { if(e.target === dlg) close(); });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape' && !dlg.hidden){ e.stopImmediatePropagation(); close(); } }, true);
+  })();
   window.__sound = c.sound || 'chain';
   (function(){
     const a = c.ambient && c.ambient.src; if(!a) return;
@@ -1438,7 +1495,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     const pics = p => (p.photos||[]).map(ph => typeof ph==='string' ? {src:ph} : ph);
     const small = ph => ph.small || ph.src.replace(/(\.[a-z]+)$/i, '-sm$1');
     const hasContent = p => !!(p.note || (p.photos||[]).length || p.cover || (c.essays||[]).some(e => e.place===(p.id||p.name) || e.place===p.name));
-    const paras = t => String(t||'').split(/\n\s*\n/).filter(Boolean).map(x => `<p>${esc(x)}</p>`).join('');
+    const paras = t => window.__rich(t);
     let lbList = [], lbIndex = 0, lastFocus = null;
 
     function openJournal(p, fromHash){
@@ -1532,7 +1589,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   (function(){
     const box = $('#ix-q'), out = $('#ix-out');
     const join = (...a) => a.filter(Boolean).join(' · ');
-    const paras = t => String(t||'').split(/\n\s*\n/).filter(Boolean).map(x => `<p>${esc(x)}</p>`).join('');
+    const paras = t => window.__rich(t);
     const clickIn = (sel, i) => setTimeout(() => { const el = document.querySelectorAll(sel)[i]; if(el && el.getAttribute('aria-pressed') !== 'true') el.click(); if(el) el.scrollIntoView({block:'center'}); }, 60);
     const items = [];
     (c.places||[]).forEach(p => items.push({ group:'Places', title:p.name, sub:join(p.subtitle || p.country, p.when), text:p.note, added:p.added,

@@ -67,6 +67,18 @@ Longer writing tied to a trip goes in `essays` or `reflections`, with `place` se
 { "title": "", "subtitle": "", "date": "", "place": "italy", "body": "Paragraphs separated by a blank line." }
 ```
 
+### Links and content warnings in writing
+
+Anywhere you write text (notes, essays, reflections), blank lines start new paragraphs, and `[some words](https://...)` becomes a link.
+
+To link to graphic footage, put this on its own line, as its own paragraph:
+
+```
+[warning: Drone strike on a trench position, eastern Ukraine, 2023](https://the-link)
+```
+
+Readers see "Graphic content" and your description, never the footage. The link appears only after they press "Show the link" and confirm, and it opens on the other site in a new tab. Nothing graphic is stored or played on this site. Describe what the footage shows plainly; that sentence is the warning.
+
 ### A record (`records`)
 
 Choosing a record and pressing Play loads it into the player in the corner, which keeps going while visitors look around the room, open other things, or switch to other browser tabs. "Hide" tucks it away without stopping it.
