@@ -11,7 +11,7 @@
 
 const ALLOWED_ORIGINS = ['https://watchingfromorbit.com', 'https://www.watchingfromorbit.com', 'http://localhost:8766', 'http://localhost:8790'];
 const MAX_BODY = 500, MAX_NAME = 40;
-const RATE_SECONDS = 600;      // one message per visitor per 10 minutes
+const RATE_WINDOW = 3600, RATE_MAX = 5;   // five messages per visitor per hour
 const DAILY_CAP = 300;         // stop accepting after this many in 24 hours, so the database can't be flooded
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -61,8 +61,8 @@ async function submit(req, env) {
   const ip = req.headers.get('CF-Connecting-IP') || '0.0.0.0';
   const ipHash = await sha256(ip + '|' + env.ADMIN_KEY);                  // the address itself is never stored
   const t = now();
-  const recent = await env.DB.prepare('SELECT COUNT(*) AS n FROM messages WHERE ip_hash = ? AND created > ?').bind(ipHash, t - RATE_SECONDS).first();
-  if (recent && recent.n > 0) return json(req, { error: 'You just sent one. Try again in a few minutes.' }, 429);
+  const recent = await env.DB.prepare('SELECT COUNT(*) AS n FROM messages WHERE ip_hash = ? AND created > ?').bind(ipHash, t - RATE_WINDOW).first();
+  if (recent && recent.n >= RATE_MAX) return json(req, { error: 'You\'ve sent five messages in the last hour. Try again later.' }, 429);
   const today = await env.DB.prepare('SELECT COUNT(*) AS n FROM messages WHERE created > ?').bind(t - 86400).first();
   if (today && today.n >= DAILY_CAP) return json(req, { error: 'The board is full for today. Try again tomorrow.' }, 429);
 

@@ -90,11 +90,11 @@ Tried and dropped:
 
 Open: what sits on the table. It only needs to fill the space quietly and isn't clickable. Leading idea: a survey map of the surrounding crater (same look as the star chart, but true to the place). Others: a tray of labelled rock samples; a typewriter with a page in it (risk: looks clickable); open books and papers. Also consider a smaller slab or the object off-centre so the window stays the focus.
 
-### Messages: planned change
+### Messages: limits
 
-- Rate limit: replace "one per 10 minutes" with "5 per hour per visitor", no gap between messages. Daily cap of 300 stays. Needs the worker code re-pasted in Cloudflare (Workers & Pages, wfo-api, Edit code, Deploy).
-- Add a line under the form before people write: "No links. I read everything before it goes up."
-- Replies or threads don't exist; "unless they're responding to me" would need a reply feature first.
+- Five messages per visitor per hour, no gap between them; 300 a day across the site. Changed 2026-11-20 from one per 10 minutes.
+- The form says "No links, please." before anyone writes.
+- Replies or threads don't exist; letting people answer Aaron would need a reply feature first.
 
 ## Music: stations
 

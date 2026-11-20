@@ -182,7 +182,7 @@ Portrait photos work best.
 
 ## Messages (board and private questions)
 
-Visitors can leave a note on a public board or send a private question. Nothing appears on the board until you approve it, and questions are never shown publicly. Messages can't contain links, one visitor can send one message every 10 minutes, and the visitor's IP address is never stored (only a scrambled fingerprint used for the 10-minute limit). The country and city come from Cloudflare.
+Visitors can leave a note on a public board or send a private question. Nothing appears on the board until you approve it, and questions are never shown publicly. Messages can't contain links, one visitor can send five messages an hour, and the visitor's IP address is never stored (only a scrambled fingerprint used for the 10-minute limit). The country and city come from Cloudflare.
 
 It runs as a Cloudflare Worker (`worker/worker.js`) with a D1 database (`worker/schema.sql`). Setup, once, in the Cloudflare dashboard:
 
