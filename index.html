@@ -464,6 +464,30 @@ html.radio-on .room-index{right:calc(clamp(18px,3vw,40px) + 68px)}
 .t-more{margin-top:12px;font-size:14px;color:var(--mute);text-decoration:underline;text-underline-offset:.2em}
 @media (max-width:560px){ .t-act.next{display:none} .st-cover{width:84px;height:84px} }
 
+
+/* ---------- index ---------- */
+.ix-q{display:block;width:100%;max-width:640px;margin:22px 0 8px;padding:12px 16px;font:inherit;font-size:16px;color:var(--ink);background:transparent;
+  border:1px solid var(--line);border-radius:999px;outline:none;transition:border-color .2s}
+.ix-q:focus{border-color:var(--glow)}
+.ix-out{max-width:680px}
+.ix-out ul{list-style:none;margin:0;padding:0}
+.ix-group{margin-top:44px}
+.drawer .ix-group{display:block}
+.ix-group h3{font-family:var(--display);font-weight:400;font-size:24px;margin:0 0 6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.ix-item{padding:12px 0;border-bottom:1px solid var(--line)}
+.ix-item.ix-track{padding:7px 0 7px 16px}
+.ix-open{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;color:var(--ink)}
+.ix-open:hover .ix-title{text-decoration:underline;text-underline-offset:.2em;text-decoration-color:var(--glow)}
+.ix-title{font-size:17px}
+.ix-track .ix-title{font-size:15px}
+.ix-sub{font-size:13px;color:var(--mute)}
+.ix-item p{margin:8px 0 0;font-size:15px;line-height:1.6;max-width:62ch}
+.ix-item details{margin-top:6px}.ix-item summary{cursor:pointer;font-size:14px;color:var(--mute)}
+.ix-new li{padding:8px 0;font-size:15px;border-bottom:1px solid var(--line)}
+.ix-new .ix-open{display:inline;color:var(--ink)}
+.ix-date{display:inline-block;min-width:96px;font-size:13px;color:var(--mute)}
+.ix-count{color:var(--mute);font-size:14px;margin:18px 0 4px}
+
 /* ---------- drawer ---------- */
 .drawer{position:fixed;inset:0;z-index:20;display:none}
 .drawer.open{display:block}
@@ -472,6 +496,7 @@ html.radio-on .room-index{right:calc(clamp(18px,3vw,40px) + 68px)}
   padding:28px clamp(20px,4vw,48px) 60px;box-shadow:-20px 0 60px rgba(0,0,0,.5);transition:background-color var(--t)}
 .drawer .close{position:sticky;top:0;float:right;font-style:italic;padding:6px 0;z-index:2;background:var(--bg);transition:background-color var(--t)}
 .drawer section{margin-top:12px;display:none}
+.drawer section section{display:block}
 .drawer section.show{display:block}
 @media (prefers-reduced-motion:no-preference){.drawer.open .panel{animation:slide .4s cubic-bezier(.2,.8,.2,1)}}
 @keyframes slide{from{transform:translateX(40px);opacity:0}}
@@ -625,7 +650,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   <div class="dock" id="dock">
     <p class="room-hint" id="hint">The light's off. Pull the cord.</p>
     <nav class="room-index" id="room-index" aria-label="Around the room">
-      <button data-open="globe">Globe</button><button data-open="records">Records</button><button data-open="readables">Shelf</button><button data-open="closet">Closet</button>
+      <button data-open="globe">Globe</button><button data-open="records">Records</button><button data-open="readables">Shelf</button><button data-open="closet">Closet</button><button data-open="index">Index</button>
     </nav>
     <header class="overlay-head">
       <h1 id="name">watchingfromorbit</h1>
@@ -663,6 +688,15 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     </div>
     <div class="rail" id="rail"></div>
     <div class="fitting" id="fitting" aria-live="polite"></div>
+  </section>
+
+  <section id="index">
+    <div class="prose">
+      <h2>Index</h2>
+      <p class="mute">Everything in the house, as plain text. Search, or browse below.</p>
+    </div>
+    <input type="search" class="ix-q" id="ix-q" placeholder="Search places, music, the shelf" aria-label="Search the site" autocomplete="off">
+    <div class="ix-out" id="ix-out" aria-live="polite"></div>
   </section>
 
   <section id="globe">
@@ -769,10 +803,10 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
       const room = $('#room'); room.style.transformOrigin = o[0]+'% '+o[1]+'%';
       room.classList.add('zoomed'); $('#roomwrap').classList.add('away');
       const delay = matchMedia('(prefers-reduced-motion:reduce)').matches ? 0 : 650;
-      setTimeout(() => { drawer.classList.add('open'); panel.scrollTop = 0; document.body.style.overflow='hidden'; $('#close').focus({preventScroll:true}); }, delay);
+      setTimeout(() => { drawer.classList.add('open'); panel.scrollTop = 0; document.body.style.overflow='hidden'; if(!matchMedia('(hover: none)').matches) $('#close').focus({preventScroll:true}); }, delay);
     } else {
       drawer.classList.add('open'); panel.scrollTop = 0; document.body.style.overflow='hidden';
-      $('#close').focus({preventScroll:true});
+      if(!matchMedia('(hover: none)').matches) $('#close').focus({preventScroll:true});
     }
   }
   function closeDrawer(){
@@ -1490,9 +1524,66 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     stage.addEventListener('pointerleave', () => tip.classList.remove('on'));
     places.forEach(p => { const b = document.createElement('button'); b.textContent = p.name; b.dataset.n = p.name; b.setAttribute('aria-pressed','false'); b.addEventListener('click', () => show(p)); pinsNav.appendChild(b); });
     new ResizeObserver(resize).observe(stage); resize();
+    window.__openPlace = p => { openDrawer('globe'); setTimeout(() => show(p), matchMedia('(prefers-reduced-motion:reduce)').matches ? 0 : 700); };
     const fromLink = location.hash && places.find(p => p.id && '#'+p.id === location.hash);
     if(fromLink){ setLit(true, true); openDrawer('globe'); active = fromLink; rot = [-fromLink.lon, -fromLink.lat*0.6]; spinning = false; setTimeout(() => openJournal(fromLink, true), 700); }
   })();
+  /* ---------- index: search, everything as text, what's new ---------- */
+  (function(){
+    const box = $('#ix-q'), out = $('#ix-out');
+    const join = (...a) => a.filter(Boolean).join(' · ');
+    const paras = t => String(t||'').split(/\n\s*\n/).filter(Boolean).map(x => `<p>${esc(x)}</p>`).join('');
+    const clickIn = (sel, i) => setTimeout(() => { const el = document.querySelectorAll(sel)[i]; if(el && el.getAttribute('aria-pressed') !== 'true') el.click(); if(el) el.scrollIntoView({block:'center'}); }, 60);
+    const items = [];
+    (c.places||[]).forEach(p => items.push({ group:'Places', title:p.name, sub:join(p.subtitle || p.country, p.when), text:p.note, added:p.added,
+      open: () => window.__openPlace && window.__openPlace(p) }));
+    (c.records||[]).forEach((r,i) => items.push({ group:'Records', title:r.title, sub:r.by, text:r.note, added:r.added,
+      open: () => { openDrawer('records'); clickIn('#crate .sleeve', i); } }));
+    (window.__stations||[]).forEach(st => {
+      items.push({ group:'Stations', title:st.name, sub:`${st.tracks.length} tracks`, text:st.note, added:st.added, open: () => { closeDrawer(); window.__deck.playStation(st); } });
+      st.tracks.forEach(t => items.push({ group:'Stations', title:t.title, sub:join(t.by, t.from, t.year), added:t.added, track:true, open: () => window.__deck.playNow(t) }));
+    });
+    (c.shelf||[]).forEach((s,i) => items.push({ group:'The shelf', title:s.title, sub:join(s.by, s.status), text:s.note, added:s.added,
+      open: () => { openDrawer('readables'); clickIn('#shelf .cover', i); } }));
+    (c.closet||[]).forEach((g,i) => items.push({ group:'The closet', title:g.name, sub:g.maker, text:g.note, added:g.added,
+      open: () => { openDrawer('closet'); clickIn('#rail .hanger', i); } }));
+    (c.essays||[]).forEach(e => items.push({ group:'Writing', title:e.title, sub:join(e.subtitle, e.date), text:e.body, long:true, added:e.added || e.date,
+      open: () => { const p = (c.places||[]).find(p => (p.id || p.name) === e.place || p.name === e.place); if(p && window.__openPlace) window.__openPlace(p); } }));
+
+    const fmtDate = d => { const t = new Date(d + 'T12:00:00'); return isNaN(t) ? d : t.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }); };
+    const news = items.filter(x => x.added && !x.track).map(x => ({ date:x.added, text:`${x.group === 'Places' ? 'New place' : 'Added'}: ${x.title}`, item:x }))
+      .concat((c.log||[]).filter(l => l.date && l.text).map(l => ({ date:l.date, text:l.text })))
+      .sort((a,b) => b.date.localeCompare(a.date)).slice(0, 8);
+
+    function itemHtml(x, i){
+      const body = x.text ? (x.long ? `<details><summary>Read</summary>${paras(x.text)}</details>` : paras(x.text)) : '';
+      return `<li class="ix-item${x.track ? ' ix-track' : ''}"><button class="ix-open" data-i="${i}"><span class="ix-title">${esc(x.title)}</span>${x.sub ? `<span class="ix-sub">${esc(x.sub)}</span>` : ''}</button>${body}</li>`;
+    }
+    function renderAll(){
+      let h = '';
+      if(news.length) h += `<section class="ix-group ix-new" aria-label="What's new"><h3>What's new</h3><ul>${news.map(n => `<li><span class="ix-date">${esc(fmtDate(n.date))}</span> ${n.item ? `<button class="ix-open" data-i="${items.indexOf(n.item)}">${esc(n.text)}</button>` : esc(n.text)}</li>`).join('')}</ul></section>`;
+      const groups = [...new Set(items.map(x => x.group))];
+      h += groups.map(g => `<section class="ix-group" aria-label="${esc(g)}"><h3>${esc(g)}</h3><ul>${items.map((x,i) => x.group === g ? itemHtml(x,i) : '').join('')}</ul></section>`).join('');
+      out.innerHTML = h || '<p class="empty">Nothing here yet.</p>';
+    }
+    function search(q){
+      const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+      const hits = items.map((x,i) => ({x,i})).filter(({x}) => { const hay = [x.title, x.sub, x.text, x.group].join(' ').toLowerCase(); return terms.every(t => hay.includes(t)); });
+      out.innerHTML = hits.length ? `<p class="ix-count">${hits.length} result${hits.length === 1 ? '' : 's'}</p><ul>${hits.map(({x,i}) => itemHtml(x,i).replace('<li class="ix-item', `<li data-group="${esc(x.group)}" class="ix-item`)).join('')}</ul>`
+        : `<p class="empty">Nothing matches "${esc(q)}".</p>`;
+    }
+    let t;
+    box.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { const q = box.value.trim(); q ? search(q) : renderAll(); if(q) track('search'); }, 120); });
+    out.addEventListener('click', e => { const b = e.target.closest('.ix-open'); if(b) items[+b.dataset.i].open(); });
+    renderAll();
+    window.__openIndex = focus => { openDrawer('index'); if(focus) setTimeout(() => box.focus(), 80); };
+    document.addEventListener('keydown', e => {
+      if(e.key !== '/' || e.metaKey || e.ctrlKey || /input|textarea/i.test((e.target.tagName||'')) ) return;
+      e.preventDefault(); window.__openIndex(true);
+    });
+    if(location.hash === '#index') window.__openIndex(false);
+  })();
+
 })();
 </script>
 </body>

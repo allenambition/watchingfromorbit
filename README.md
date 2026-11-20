@@ -157,6 +157,16 @@ For a video, paste the YouTube link in `youtube` and leave `cover` empty; the th
 
 Portrait photos work best.
 
+## The index and "what's new"
+
+"Index" in the room's menu (or `/` on a keyboard, or the link `watchingfromorbit.com/#index`) opens a plain-text list of everything on the site with a search box. It's also the text-only version of the site.
+
+"What's new" at the top of the index is built automatically: any item in `content.json` with `"added": "YYYY-MM-DD"` (a place, record, station, shelf item, closet piece or essay) appears there, newest first. For news that isn't one item, such as a new room, add a line to `log`:
+
+```json
+"log": [ { "date": "2026-11-19", "text": "Stations and a player that keeps going while you look around" } ]
+```
+
 ## The room pictures and the clickable areas
 
 The room is a photograph (generated image). The clickable areas are invisible boxes placed over it, set in `content.json → hotspots` as `[left, top, width, height]` in percent of the picture. Because they're percentages, they stay on their objects at any screen size.

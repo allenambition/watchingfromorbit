@@ -19,7 +19,8 @@
       "note": "",
       "apple": "https://music.apple.com/us/playlist/brown-liquor-me/pl.u-yZyVWRVFzBAavb",
       "cover": null,
-      "hue": 28
+      "hue": 28,
+      "added": "2026-11-16"
     },
     {
       "title": "1-25",
@@ -27,7 +28,8 @@
       "note": "",
       "apple": "https://music.apple.com/us/playlist/1-25/pl.u-qxyl0J5sXRY9pN",
       "cover": null,
-      "hue": 205
+      "hue": 205,
+      "added": "2026-11-16"
     }
   ],
   "shelf": [],
@@ -87,7 +89,8 @@
         {
           "src": "img/travel/italy/doorway.jpg"
         }
-      ]
+      ],
+      "added": "2026-11-17"
     },
     {
       "name": "Chicago",
@@ -235,5 +238,16 @@
     "embed": "any other player's embed src (Audiomack, Bandcamp)",
     "file": "one audio file you have the rights to, e.g. audio/song.mp3",
     "tracks": "several files: [{\"title\":\"\",\"file\":\"audio/x.mp3\",\"by\":\"\"}]"
-  }
+  },
+  "log": [
+    {
+      "date": "2026-11-19",
+      "text": "Stations and a player that keeps going while you look around"
+    },
+    {
+      "date": "2026-11-17",
+      "text": "The house moved to watchingfromorbit.com"
+    }
+  ],
+  "_log_help": "What's new: anything with an \"added\": \"YYYY-MM-DD\" date shows up automatically. Use log for other news, e.g. a new room."
 }
