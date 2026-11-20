@@ -370,32 +370,99 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .lb-prev:focus-visible,.lb-next:focus-visible{outline-offset:-6px}
 
 
-/* ---------- deck: the player that keeps going while you look around ---------- */
-.deck{position:fixed;z-index:35;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px);width:min(380px,calc(100vw - 24px));
-  background:rgba(14,12,12,.92);color:#f3ece2;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);overflow:hidden}
-.deck[hidden],.deck [hidden]{display:none !important}
-.deck-bar{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 14px;min-height:52px}
-.deck-meta{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
-.deck-title{font-family:var(--display);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.deck-sub{font-size:12px;letter-spacing:.03em;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.deck-btn{flex:0 0 auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#f3ece2}
-.deck-btn svg{width:20px;height:20px;fill:currentColor}
-.deck-play{background:rgba(255,255,255,.1)}
-.deck-play .i-pause{display:none}.deck.playing .deck-play .i-pause{display:block}.deck.playing .deck-play .i-play{display:none}
-.deck-text{flex:0 0 auto;font-size:13px;letter-spacing:.04em;opacity:.7;padding:8px 2px}
-.deck-text:hover,.deck-btn:hover{opacity:1}
-.deck-progress{height:3px;background:rgba(255,255,255,.12);cursor:pointer;margin:0 14px 10px}
-.deck-progress div{height:100%;width:0;background:#E0A44A}
+/* ---------- player: keeps going while you look around ---------- */
+.radio-fab{position:fixed;z-index:36;right:clamp(14px,2vw,24px);bottom:calc(clamp(14px,2vw,24px) + env(safe-area-inset-bottom));
+  width:52px;height:52px;border-radius:50%;background:rgba(14,12,12,.92);color:#f3ece2;box-shadow:0 10px 30px rgba(0,0,0,.5);
+  display:grid;place-items:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .2s}
+.radio-fab[hidden]{display:none}
+.radio-fab:hover{transform:scale(1.05)}
+.fab-disc{width:38px;height:38px;border-radius:50%;overflow:hidden;background:radial-gradient(circle,#2a2522 0 18%,#111 19% 100%);display:grid;place-items:center}
+.fab-disc img{width:100%;height:100%;object-fit:cover;display:block}
+.fab-disc img[src=""],.fab-disc img:not([src]){display:none}
+html.radio-playing .fab-disc{animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){html.radio-playing .fab-disc{animation:none}}
+.fab-dot{position:absolute;right:6px;top:6px;width:9px;height:9px;border-radius:50%;background:#E0A44A;box-shadow:0 0 0 2px rgba(14,12,12,.92);display:none}
+html.radio-playing .fab-dot{display:block}
+html.radio-on .room-index{right:calc(clamp(18px,3vw,40px) + 68px)}
+
+.deck{position:fixed;z-index:37;right:clamp(14px,2vw,24px);bottom:calc(clamp(14px,2vw,24px) + 62px + env(safe-area-inset-bottom));
+  width:min(400px,calc(100vw - 24px));max-height:min(74vh,640px);display:flex;flex-direction:column;
+  background:rgba(14,12,12,.95);color:#f3ece2;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.55);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden;
+  transition:opacity .25s,transform .25s}
+.deck[hidden]{display:none}
+.deck.min{opacity:0;transform:translateY(12px);pointer-events:none;visibility:hidden}
+.deck [hidden]{display:none !important}
+.deck-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px 4px;font-size:12px;letter-spacing:.05em}
+.deck-station{opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-head div{display:flex;gap:14px;flex:0 0 auto}
+.deck-text{font-size:13px;letter-spacing:.04em;opacity:.7;padding:6px 0;color:#f3ece2}
+.deck-text:hover,.deck-text:focus-visible{opacity:1}
+.deck-now{display:flex;gap:14px;align-items:center;padding:10px 16px 6px}
+.deck-cover{flex:0 0 auto;width:64px;height:64px;border-radius:4px;object-fit:cover;background:#2a2522}
+.deck-cover:not([src]),.deck-cover[src=""]{visibility:hidden;width:0;margin-right:-14px}
+.deck-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.25}
+.deck-title{font-family:var(--display);font-size:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-sub{font-size:13px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-controls{display:flex;justify-content:center;align-items:center;gap:18px;padding:8px 16px 4px}
+.deck-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#f3ece2;opacity:.85}
+.deck-btn:hover,.deck-btn:focus-visible{opacity:1}
+.deck-btn svg{width:22px;height:22px;fill:currentColor}
+.deck-play{width:50px;height:50px;background:#f3ece2;color:#141110;opacity:1}
+.deck-play svg{width:24px;height:24px}
+.deck-play .i-pause{display:none}html.radio-playing .deck-play .i-pause{display:block}html.radio-playing .deck-play .i-play{display:none}
+.deck-time{display:flex;align-items:center;gap:10px;padding:6px 16px 12px;font-size:11px;letter-spacing:.04em;opacity:.75;font-variant-numeric:tabular-nums}
+.deck-progress{flex:1;height:14px;display:flex;align-items:center;cursor:pointer;touch-action:none}
+.deck-progress::before{content:"";position:absolute}
+.deck-bar{position:relative;width:100%;height:3px;background:rgba(255,255,255,.15);border-radius:2px}
+.deck-bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:#E0A44A;border-radius:2px}
 .deck-embed iframe{display:block;width:100%;height:175px;border:0;background:transparent}
-.deck.min .deck-embed{position:absolute;left:-10000px;top:0;width:360px}
-.deck-note{font-size:12px;opacity:.55;padding:0 14px 10px;margin:0}
-.deck.min .deck-note{display:none}
+.deck-embed-note{font-size:12px;opacity:.6;padding:0 16px 12px;margin:0}
+.deck-queue{border-top:1px solid rgba(255,255,255,.08);overflow-y:auto;overscroll-behavior:contain;padding:8px 0 10px;min-height:0}
+.deck-queue h4{margin:6px 16px 4px;font-family:var(--text);font-weight:500;font-size:12px;letter-spacing:.06em;opacity:.55}
+.deck-queue .then{margin:8px 16px 2px;font-size:12px;opacity:.5}
+.q-row{display:flex;align-items:center;gap:10px;padding:5px 10px 5px 16px}
+.q-row:hover{background:rgba(255,255,255,.04)}
+.q-row img,.q-row .q-ph{width:34px;height:34px;border-radius:3px;object-fit:cover;flex:0 0 auto;background:#2a2522}
+.q-main{flex:1;min-width:0;text-align:left;display:flex;flex-direction:column;line-height:1.25;color:#f3ece2}
+.q-main b{font-weight:400;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-main span{font-size:12px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-x{flex:0 0 auto;width:30px;height:30px;color:#f3ece2;opacity:.5;font-size:18px;line-height:1}
+.q-x:hover{opacity:1}
+.toast{position:fixed;z-index:38;left:50%;top:calc(16px + env(safe-area-inset-top));translate:-50% 0;max-width:calc(100vw - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  background:rgba(14,12,12,.95);color:#f3ece2;font-size:13px;letter-spacing:.03em;padding:9px 14px;border-radius:999px;
+  box-shadow:0 10px 30px rgba(0,0,0,.45);opacity:0;transform:translateY(-6px);transition:opacity .2s,transform .2s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
 @media (max-width:760px){
-  .deck{left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:auto}
-  html.deck-on .dock{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+  .deck{left:8px;right:8px;width:auto;bottom:calc(72px + env(safe-area-inset-bottom));max-height:70vh}
+  html.radio-on .dock{padding-right:72px}
 }
+
+/* ---------- stations, in the records drawer ---------- */
 .play-record{display:inline-block;margin-top:18px;padding:10px 18px;border:1px solid var(--line);border-radius:999px;font-size:14px;letter-spacing:.04em;transition:border-color .2s}
 .play-record:hover,.play-record:focus-visible{border-color:var(--glow)}
+.stations{margin-top:56px}
+.stations > h3{font-family:var(--display);font-weight:400;font-size:clamp(24px,2.6vw,30px);margin:0 0 6px}
+.station{margin-top:34px}
+.st-head{display:flex;gap:18px;align-items:flex-end}
+.st-cover{width:110px;height:110px;flex:0 0 auto;border-radius:3px;object-fit:cover;background:var(--bg-2);box-shadow:0 8px 22px rgba(0,0,0,.4)}
+.st-head h4{font-family:var(--display);font-weight:400;font-size:24px;margin:0 0 2px;line-height:1.1}
+.st-head .mute{font-size:14px;margin:0 0 10px}
+.st-head .play-record{margin-top:0}
+.st-note{max-width:62ch;margin:14px 0 0;font-size:16px;line-height:1.6}
+.tracklist{list-style:none;margin:18px 0 0;padding:0;border-top:1px solid var(--line)}
+.tracklist li{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);transition:border-color var(--t)}
+.tracklist li.now .t-main b{color:var(--glow)}
+.t-main{flex:1;min-width:0;display:flex;align-items:center;gap:12px;text-align:left}
+.t-main img,.t-main .q-ph{width:40px;height:40px;border-radius:2px;object-fit:cover;flex:0 0 auto;background:var(--bg-2)}
+.t-main span{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.t-main b{font-weight:400;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-main small{font-size:13px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color var(--t)}
+.t-act{flex:0 0 auto;font-size:13px;letter-spacing:.03em;color:var(--mute);padding:6px 4px;transition:color .2s}
+.t-act:hover,.t-act:focus-visible{color:var(--ink)}
+.t-more{margin-top:12px;font-size:14px;color:var(--mute);text-decoration:underline;text-underline-offset:.2em}
+@media (max-width:560px){ .t-act.next{display:none} .st-cover{width:84px;height:84px} }
 
 /* ---------- drawer ---------- */
 .drawer{position:fixed;inset:0;z-index:20;display:none}
@@ -574,7 +641,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   <section id="records">
     <div class="prose">
       <h2>Records</h2>
-      <p class="mute">Playlists I keep coming back to. Pick one to play it.</p>
+      <p class="mute">Playlists I keep coming back to, and stations of loose tracks. Whatever you play keeps going while you look around.</p>
     </div>
     <div class="crate" id="crate"></div>
     <div class="turntable" id="turntable" aria-live="polite"></div>
@@ -625,18 +692,21 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     <button class="lb-next" id="lb-next" aria-label="Next photo"></button>
     <div class="lb-count" id="lb-count"></div>
   </div>
-  <div class="deck" id="deck" role="region" aria-label="Now playing" hidden>
-    <div class="deck-bar">
-      <button class="deck-btn deck-play" id="deck-play" aria-label="Play" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
-      <button class="deck-btn deck-next" id="deck-next" aria-label="Next track" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5l9 7-9 7zM16 5h2v14h-2z"/></svg></button>
-      <div class="deck-meta"><span class="deck-title" id="deck-title"></span><span class="deck-sub" id="deck-sub"></span></div>
-      <button class="deck-text" id="deck-toggle" hidden>Hide</button>
-      <button class="deck-text" id="deck-stop" aria-label="Stop and close the player">Close</button>
+  <button class="radio-fab" id="radio-fab" aria-label="Open the player" aria-expanded="false" hidden><span class="fab-disc"><img id="fab-cover" alt=""></span><span class="fab-dot"></span></button>
+  <div class="deck min" id="deck" role="dialog" aria-label="Player" hidden>
+    <div class="deck-head"><span class="deck-station" id="deck-station"></span><div><button class="deck-text" id="deck-min">Hide</button><button class="deck-text" id="deck-stop">Stop</button></div></div>
+    <div class="deck-now"><img class="deck-cover" id="deck-cover" alt=""><div class="deck-meta"><span class="deck-title" id="deck-title"></span><span class="deck-sub" id="deck-sub"></span></div></div>
+    <div class="deck-controls" id="deck-controls">
+      <button class="deck-btn" id="deck-prev" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5v14l-9-7zM6 5h2v14H6z"/></svg></button>
+      <button class="deck-btn deck-play" id="deck-play" aria-label="Play or pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+      <button class="deck-btn" id="deck-next" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5l9 7-9 7zM16 5h2v14h-2z"/></svg></button>
     </div>
-    <div class="deck-progress" id="deck-progress" hidden><div id="deck-fill"></div></div>
+    <div class="deck-time" id="deck-time"><span id="t-cur">0:00</span><div class="deck-progress" id="deck-progress" role="slider" aria-label="Position in track" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><div class="deck-bar"><i id="deck-fill"></i></div></div><span id="t-dur">0:00</span></div>
     <div class="deck-embed" id="deck-embed"></div>
-    <audio id="deck-audio" preload="none"></audio>
+    <div class="deck-queue" id="deck-queue"></div>
+    <audio id="deck-audio" preload="metadata"></audio>
   </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </main>
 
 <script src="d3.min.js"></script>
@@ -846,11 +916,9 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     sc.dataset.goatcounter = `https://${code}.goatcounter.com/count`; document.head.appendChild(sc);
   })();
 
-  /* ---------- deck ---------- */
+  /* ---------- player ---------- */
   (function(){
-    const deck = $('#deck'), audio = $('#deck-audio'), embedBox = $('#deck-embed');
-    let rec = null, tracks = [], ti = 0;
-    const show = (el, on) => { el.hidden = !on; };
+    const deck = $('#deck'), fab = $('#radio-fab'), audio = $('#deck-audio'), embedBox = $('#deck-embed');
     const ytId = u => { const m = String(u||'').match(/(?:youtu\.be\/|v=|\/shorts\/|\/embed\/)([\w-]{11})/); return m ? m[1] : null; };
     function embedSrc(r){
       if(r.embed) return r.embed;
@@ -859,57 +927,154 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
       if(r.soundcloud) return 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(r.soundcloud) + '&color=%23e0a44a&visual=false';
       return null;
     }
+    const fmt = s => { if(!isFinite(s)) return '0:00'; s = Math.floor(s); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); };
+    const coverOf = t => (t && (t.cover || (t._station && t._station.cover))) || '';
+    const subOf = t => [t.by, t.from, t.year].filter(Boolean).join(' · ');
+    const toastEl = $('#toast'); let toastT;
+    function toast(msg){ toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1800); }
+
+    // state
+    let mode = null, current = null, station = null, bag = [], history = [], ahead = [], queue = [];
+    function shuffled(list, avoid){
+      const a = list.slice(); for(let i = a.length-1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+      if(avoid && a.length > 1 && a[a.length-1] === avoid) [a[0], a[a.length-1]] = [a[a.length-1], a[0]];
+      return a;
+    }
+    function fromBag(){ if(!station) return null; if(!bag.length) bag = shuffled(station.tracks, current); return bag.pop(); }
+
+    function open(){ deck.hidden = false; deck.classList.remove('min'); fab.setAttribute('aria-expanded','true'); renderQueue(); }
+    function hide(){ deck.classList.add('min'); fab.setAttribute('aria-expanded','false'); }
+    function showChrome(){ fab.hidden = false; deck.hidden = false; html.classList.add('radio-on'); }
+    fab.addEventListener('click', () => deck.classList.contains('min') ? open() : hide());
+    $('#deck-min').addEventListener('click', hide);
+    document.addEventListener('keydown', e => { if(e.key === 'Escape' && !deck.classList.contains('min') && !$('#lightbox').classList.contains('open') && !$('#journal').classList.contains('open') && !$('#drawer').classList.contains('open')) hide(); });
+
     function stop(){
-      audio.pause(); audio.removeAttribute('src'); embedBox.innerHTML = ''; deck.hidden = true; deck.classList.remove('playing','min');
-      html.classList.remove('deck-on'); rec = null; if('mediaSession' in navigator) navigator.mediaSession.metadata = null;
-    }
-    function setTrack(i, play){
-      ti = (i + tracks.length) % tracks.length; const t = tracks[ti];
-      audio.src = t.file; $('#deck-title').textContent = t.title || rec.title;
-      $('#deck-sub').textContent = [tracks.length > 1 ? `${rec.title}, ${ti+1} of ${tracks.length}` : rec.title !== t.title ? rec.title : '', t.by || rec.by].filter(Boolean).join(' · ');
-      if('mediaSession' in navigator && window.MediaMetadata){
-        navigator.mediaSession.metadata = new MediaMetadata({ title: t.title || rec.title, artist: t.by || rec.by || '', album: rec.title, artwork: rec.cover ? [{src: new URL(rec.cover, location.href).href}] : [] });
-      }
-      if(play) audio.play().catch(() => {});
-    }
-    function load(r){
-      if(!r) return; stop(); rec = r; deck.hidden = false; html.classList.add('deck-on');
-      tracks = (r.tracks || (r.file ? [{title:r.title, file:r.file}] : [])).filter(t => t.file);
-      track('play/' + slug(r.title));
-      if(tracks.length){
-        show($('#deck-play'), true); show($('#deck-next'), tracks.length > 1); show($('#deck-progress'), true); show($('#deck-toggle'), false);
-        setTrack(0, true);
-      } else {
-        const src = embedSrc(r);
-        show($('#deck-play'), false); show($('#deck-next'), false); show($('#deck-progress'), false); show($('#deck-toggle'), !!src);
-        $('#deck-title').textContent = r.title; $('#deck-sub').textContent = src ? 'Press play in the player. It keeps going while you look around.' : 'No player for this record yet.';
-        if(src){
-          embedBox.innerHTML = `<iframe title="${esc(r.title)}" src="${esc(src)}" allow="autoplay *; encrypted-media *; clipboard-write" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" loading="eager"></iframe>`;
-        }
-        $('#deck-toggle').textContent = 'Hide';
-      }
+      audio.pause(); audio.removeAttribute('src'); audio.load(); embedBox.innerHTML = '';
+      mode = current = station = null; bag = []; history = []; ahead = []; queue = [];
+      fab.hidden = true; deck.hidden = true; deck.classList.add('min'); html.classList.remove('radio-on','radio-playing');
+      if('mediaSession' in navigator) navigator.mediaSession.metadata = null;
+      document.dispatchEvent(new CustomEvent('radio:change'));
     }
     $('#deck-stop').addEventListener('click', stop);
-    $('#deck-toggle').addEventListener('click', () => {
-      const min = deck.classList.toggle('min'); $('#deck-toggle').textContent = min ? 'Show' : 'Hide';
-      if(min && rec) $('#deck-sub').textContent = rec.by || 'Playing in the background';
+
+    function setMode(m){
+      mode = m;
+      ['deck-controls','deck-time','deck-queue'].forEach(id => $('#'+id).hidden = (m !== 'audio'));
+      if(m !== 'audio'){ audio.pause(); audio.removeAttribute('src'); }
+      if(m !== 'embed') embedBox.innerHTML = '';
+    }
+
+    function render(){
+      const t = current;
+      $('#deck-title').textContent = t ? t.title : '';
+      $('#deck-sub').textContent = t ? subOf(t) : '';
+      $('#deck-station').textContent = station ? station.name + ', shuffled' : (mode === 'audio' ? 'Now playing' : '');
+      const cv = coverOf(t); const ci = $('#deck-cover'), fi = $('#fab-cover');
+      if(cv){ ci.src = cv; fi.src = cv; } else { ci.removeAttribute('src'); fi.removeAttribute('src'); }
+      renderQueue();
+      document.dispatchEvent(new CustomEvent('radio:change'));
+    }
+    function row(t, i, removable){
+      const cv = coverOf(t);
+      return `<div class="q-row">` + (cv ? `<img src="${esc(cv)}" alt="" loading="lazy">` : '<span class="q-ph"></span>') +
+        `<button class="q-main" data-q="${i}"><b>${esc(t.title)}</b><span>${esc(subOf(t))}</span></button>` +
+        (removable ? `<button class="q-x" data-qx="${i}" aria-label="Remove ${esc(t.title)} from the queue">×</button>` : '') + '</div>';
+    }
+    function renderQueue(){
+      const box = $('#deck-queue'); if(mode !== 'audio'){ box.innerHTML = ''; return; }
+      const upcoming = ahead.concat(queue);
+      let h = '';
+      if(upcoming.length) h += '<h4>Up next</h4>' + upcoming.map((t,i) => row(t, i, i >= ahead.length)).join('');
+      if(station) h += `<p class="then">${upcoming.length ? 'Then' : 'Up next:'} shuffling ${esc(station.name)}</p>`;
+      else if(!upcoming.length) h += '<p class="then">Nothing queued. Pick a station or add tracks from Records.</p>';
+      box.innerHTML = h;
+    }
+    $('#deck-queue').addEventListener('click', e => {
+      const x = e.target.closest('[data-qx]');
+      if(x){ const i = +x.dataset.qx - ahead.length; queue.splice(i, 1); renderQueue(); return; }
+      const q = e.target.closest('[data-q]'); if(!q) return;
+      const i = +q.dataset.q;
+      const t = i < ahead.length ? ahead.splice(i,1)[0] : queue.splice(i - ahead.length, 1)[0];
+      play(t, true);
     });
-    $('#deck-play').addEventListener('click', () => audio.paused ? audio.play().catch(()=>{}) : audio.pause());
-    $('#deck-next').addEventListener('click', () => setTrack(ti+1, true));
-    audio.addEventListener('play', () => deck.classList.add('playing'));
-    audio.addEventListener('pause', () => deck.classList.remove('playing'));
-    audio.addEventListener('ended', () => { if(ti < tracks.length-1) setTrack(ti+1, true); });
-    audio.addEventListener('timeupdate', () => { $('#deck-fill').style.width = (audio.duration ? 100*audio.currentTime/audio.duration : 0) + '%'; });
-    $('#deck-progress').addEventListener('click', e => { if(!audio.duration) return; const r = e.currentTarget.getBoundingClientRect(); audio.currentTime = audio.duration * (e.clientX - r.left) / r.width; });
+
+    function play(t, remember){
+      if(!t) return;
+      if(mode !== 'audio') setMode('audio');
+      if(remember && current) history.push(current);
+      current = t; audio.src = t.file; audio.play().catch(() => {});
+      showChrome(); render();
+      if('mediaSession' in navigator && window.MediaMetadata){
+        const cv = coverOf(t);
+        navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.by || '', album: t.from || (station && station.name) || '', artwork: cv ? [{src: new URL(cv, location.href).href}] : [] });
+      }
+      track('play/' + slug((t._station ? t._station.name + '/' : '') + t.title));
+    }
+    function next(){
+      const t = ahead.shift() || queue.shift() || fromBag();
+      if(t) play(t, true); else { audio.pause(); audio.currentTime = 0; render(); }
+    }
+    function prev(){
+      if(audio.currentTime > 4 || !history.length){ audio.currentTime = 0; return; }
+      if(current) ahead.unshift(current);
+      current = null; play(history.pop(), false);
+    }
+    $('#deck-play').addEventListener('click', () => { if(!current) return next(); audio.paused ? audio.play().catch(()=>{}) : audio.pause(); });
+    $('#deck-next').addEventListener('click', next);
+    $('#deck-prev').addEventListener('click', prev);
+    audio.addEventListener('play', () => html.classList.add('radio-playing'));
+    audio.addEventListener('pause', () => html.classList.remove('radio-playing'));
+    audio.addEventListener('ended', next);
+    audio.addEventListener('error', () => { if(audio.getAttribute('src')){ toast("That track couldn't load. Skipping."); setTimeout(next, 600); } });
+    audio.addEventListener('loadedmetadata', () => { $('#t-dur').textContent = fmt(audio.duration); });
+    audio.addEventListener('timeupdate', () => {
+      const p = audio.duration ? 100*audio.currentTime/audio.duration : 0;
+      $('#deck-fill').style.width = p + '%'; $('#t-cur').textContent = fmt(audio.currentTime);
+      $('#deck-progress').setAttribute('aria-valuenow', Math.round(p));
+    });
+    const seekTo = e => { if(!audio.duration) return; const r = $('#deck-progress').getBoundingClientRect(); audio.currentTime = audio.duration * Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); };
+    let seeking = false;
+    $('#deck-progress').addEventListener('pointerdown', e => { seeking = true; e.currentTarget.setPointerCapture(e.pointerId); seekTo(e); });
+    $('#deck-progress').addEventListener('pointermove', e => { if(seeking) seekTo(e); });
+    $('#deck-progress').addEventListener('pointerup', () => seeking = false);
+    $('#deck-progress').addEventListener('keydown', e => { if(e.key === 'ArrowRight') audio.currentTime += 10; if(e.key === 'ArrowLeft') audio.currentTime -= 10; });
     if('mediaSession' in navigator){
       try{
         navigator.mediaSession.setActionHandler('play', () => audio.play());
         navigator.mediaSession.setActionHandler('pause', () => audio.pause());
-        navigator.mediaSession.setActionHandler('nexttrack', () => setTrack(ti+1, true));
-        navigator.mediaSession.setActionHandler('previoustrack', () => setTrack(ti-1, true));
+        navigator.mediaSession.setActionHandler('nexttrack', next);
+        navigator.mediaSession.setActionHandler('previoustrack', prev);
       }catch(e){}
     }
-    window.__deck = { load, stop };
+
+    // public: playlists (embeds), stations (shuffle), single tracks, queue
+    function load(r){
+      if(!r) return;
+      const files = (r.tracks || (r.file ? [{title: r.title, file: r.file}] : [])).filter(t => t.file);
+      if(files.length){
+        station = null; bag = []; ahead = []; queue = files.slice(1).map(t => Object.assign({by: r.by, cover: r.cover}, t));
+        return play(Object.assign({by: r.by, cover: r.cover}, files[0]), true);
+      }
+      const src = embedSrc(r); if(!src) return;
+      setMode('embed'); current = { title: r.title, by: r.by }; station = null;
+      embedBox.innerHTML = `<iframe title="${esc(r.title)}" src="${esc(src)}" allow="autoplay *; encrypted-media *; clipboard-write" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" loading="eager"></iframe>` +
+        `<p class="deck-embed-note">Press play in the player above. It keeps going while you look around.${r.apple ? ' Full songs if you\'re signed in to Apple Music; 30-second previews if not.' : ''}</p>`;
+      $('#deck-cover').removeAttribute('src'); $('#fab-cover').removeAttribute('src');
+      $('#deck-title').textContent = r.title; $('#deck-sub').textContent = r.by || '';
+      $('#deck-station').textContent = 'Playlist';
+      html.classList.add('radio-playing'); showChrome(); open();
+      track('play/' + slug(r.title));
+    }
+    function playStation(st){
+      if(!st || !st.tracks.length) return;
+      station = st; bag = shuffled(st.tracks); ahead = []; queue = [];
+      play(bag.pop(), true); toast(`Playing ${st.name}, shuffled`);
+    }
+    function playNow(t){ if(t._station && station !== t._station){ station = t._station; bag = shuffled(station.tracks, t); } play(t, true); toast(`Now playing: ${t.title}`); }
+    function playNext(t){ if(!current) return playNow(t); queue.unshift(t); if(!station && t._station){ station = t._station; bag = []; } renderQueue(); toast(`Playing next: ${t.title}`); }
+    function enqueue(t){ if(!current) return playNow(t); queue.push(t); if(!station && t._station){ station = t._station; bag = []; } renderQueue(); toast(`Added to queue: ${t.title}`); }
+    window.__deck = { load, stop, playStation, playNow, playNext, enqueue, current: () => current };
   })();
   window.__sound = c.sound || 'chain';
   (function(){
@@ -1052,6 +1217,49 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   });
 
   turntable.addEventListener('click', e => { const pb = e.target.closest('[data-record]'); if(pb) window.__deck.load(c.records[+pb.dataset.record]); });
+
+  /* ---------- stations ---------- */
+  (function(){
+    const stations = (c.stations || []).map(st => {
+      const s = Object.assign({}, st); s.id = s.id || slug(s.name);
+      s.tracks = (st.tracks || []).filter(t => t && t.file).map(t => Object.assign({}, t, { _station: s }));
+      return s;
+    }).filter(s => s.tracks.length);
+    window.__stations = stations;
+    if(!stations.length) return;
+    const host = document.createElement('div'); host.className = 'stations';
+    host.innerHTML = '<h3>Stations</h3><p class="mute">Loose tracks, mostly from the blog era. A station shuffles; you can also play or queue any track.</p>';
+    const LIMIT = 12;
+    stations.forEach((st, si) => {
+      const el = document.createElement('div'); el.className = 'station'; el.setAttribute('role','group'); el.setAttribute('aria-label', st.name);
+      const rowsHtml = st.tracks.map((t, ti) => {
+        const cv = t.cover || st.cover;
+        return `<li data-t="${ti}"${ti >= LIMIT ? ' hidden' : ''}><button class="t-main" data-act="now">${cv ? `<img src="${esc(cv)}" alt="" loading="lazy">` : '<span class="q-ph"></span>'}<span><b>${esc(t.title)}</b><small>${esc([t.by, t.from, t.year].filter(Boolean).join(' · '))}</small></span></button>` +
+          `<button class="t-act next" data-act="next">Play next</button><button class="t-act" data-act="queue">Add to queue</button></li>`;
+      }).join('');
+      el.innerHTML = `<div class="st-head">${st.cover ? `<img class="st-cover" src="${esc(st.cover)}" alt="">` : ''}<div><h4>${esc(st.name)}</h4><p class="mute">${st.tracks.length} track${st.tracks.length === 1 ? '' : 's'}</p><button class="play-record" data-station="${si}">Play station</button></div></div>` +
+        (st.note ? `<p class="st-note">${esc(st.note)}</p>` : '') +
+        `<ol class="tracklist">${rowsHtml}</ol>` + (st.tracks.length > LIMIT ? `<button class="t-more">Show all ${st.tracks.length}</button>` : '');
+      el.addEventListener('click', e => {
+        if(e.target.closest('.t-more')){ el.querySelectorAll('li[hidden]').forEach(li => li.hidden = false); e.target.remove(); return; }
+        if(e.target.closest('[data-station]')) return window.__deck.playStation(st);
+        const b = e.target.closest('[data-act]'); if(!b) return;
+        const t = st.tracks[+b.closest('li').dataset.t];
+        ({ now: window.__deck.playNow, next: window.__deck.playNext, queue: window.__deck.enqueue })[b.dataset.act](t);
+      });
+      host.appendChild(el);
+    });
+    $('#records').appendChild(host);
+    // mark the track that's playing
+    document.addEventListener('radio:change', () => {
+      const cur = window.__deck.current();
+      host.querySelectorAll('.tracklist li').forEach(li => {
+        const st = stations[[...host.querySelectorAll('.station')].indexOf(li.closest('.station'))];
+        li.classList.toggle('now', !!cur && st && st.tracks[+li.dataset.t] === cur);
+      });
+    });
+  })();
+
 
   /* ---------- shelf ---------- */
   const shelf = $('#shelf'), pulled = $('#pulled');

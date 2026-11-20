@@ -104,6 +104,30 @@ Only put audio files in this repository that you have the rights to (your own mu
 
 `cover` is optional; with a cover, the record also stands on the room's shelves.
 
+### A station (`stations`)
+
+Stations are your uploaded tracks, grouped by theme. They appear under Records. "Play station" shuffles the whole station; each track can also be played now, played next, or added to the queue. Whatever plays keeps going while visitors move around the site or switch tabs. The round player icon in the corner opens the player (now playing, previous/next, the queue).
+
+```json
+"stations": [
+  {
+    "name": "Blog era",
+    "note": "Optional line about the station.",
+    "cover": "https://media.watchingfromorbit.com/covers/blog-era.jpg",
+    "tracks": [
+      { "title": "Take Me High", "by": "Pac Div", "from": "Mania!", "year": 2011,
+        "file": "https://media.watchingfromorbit.com/audio/take-me-high.mp3",
+        "cover": "https://media.watchingfromorbit.com/covers/mania.jpg" }
+    ]
+  }
+]
+```
+
+- Upload MP3s to the R2 bucket's `audio/` folder and covers to `covers/` (square JPGs, about 600×600). Paste each file's `https://media.watchingfromorbit.com/...` address.
+- A track without its own `cover` uses the station's.
+- `from` and `year` are optional; they show as "Pac Div · Mania! · 2011".
+- A station with no tracks doesn't show at all.
+
 ### Something on the shelf (`shelf`)
 
 ```json
