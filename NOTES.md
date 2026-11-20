@@ -8,7 +8,8 @@ Last updated: 2026-11-17.
 
 - Live at https://watchingfromorbit.com/ (GitHub Pages, branch `main`; the domain is registered at Cloudflare with auto-renew, DNS on Cloudflare set to DNS only). The old github.io address forwards there.
 - One room: the observatory lounge (porthole with Chicago skyline, floor globe, bulb, two shelves, console with turntable, wardrobe).
-- Working: light switch, globe with zoom-in, Italy destination page, records with a player that keeps playing across the site and in background tabs, phone swiping, visitor counting.
+- Working: light switch, globe with zoom-in (always takes the short way to a place), Italy destination page, records (playlists) and stations (uploaded tracks, shuffle and queue) with a player behind an icon in the corner that keeps playing across the site and in background tabs, the Index (search, everything as text, what's new), content warnings for graphic links, phone swiping, visitor counting.
+- Built but switched off until set up in Cloudflare: the message board and private question box (`worker/`, steps in README under "Messages").
 - Real content so far: Italy (12 photos and caption), two Apple Music playlists. Shelf and wardrobe are empty. Chicago, Mexico City, New Orleans and Houston are pins with no content yet.
 
 ## Saved versions
@@ -58,6 +59,24 @@ Rule: only add an object that will get something new at least monthly. An empty 
 | Camera on the console | Non-travel photos and film | Idea |
 | Radio | Podcasts | Idea |
 | Clock or desk calendar | A "now" page | Idea |
+
+## Two rooms: what goes where
+
+- **The lounge** (current room): a life of pleasure. Music, travel, food and drink, clothes, collections.
+- **The observation deck** (second room, image in progress): the long view. History, power, war, tech, science, the future. First draft is a moon-base library looking back at Earth.
+  - **Telescope:** Aaron's essays, including dark and taboo subjects. Graphic footage is linked behind a content warning, never hosted (GitHub's rules ban gratuitous violence; context and warnings are what keep writing about it allowed). Documenting Reality posts can't be shared past its paywall; link the original source where possible, or describe the footage in writing.
+  - **Chessboard** (replacing the star chart): history and power struggles.
+  - **Terminal:** the message board, private questions, search, the what's-new log, the text-only view. All built; they sit in the Index until the deck exists.
+  - **The Earth in the window:** drawn live with the real day/night line for the moment someone visits; clicking it could show where visitors come from (GoatCounter).
+  - Bookshelves are scenery; the real reading list stays on the lounge shelf.
+  - Telescope moves here from the lounge plan. Next lounge panorama: no telescope, an unbranded game console, depth (a lounge chair in the foreground, staggered objects).
+- The doorway between rooms should be a deliberate transition (an airlock or a stairwell up), since the deck is a different world.
+
+## Music: stations
+
+- Records hold playlists (Apple Music now, Spotify later). Stations hold uploaded tracks, grouped by theme (first: blog era). A station shuffles; visitors can also play a track now, play it next, or add it to the queue.
+- Files and covers live in R2: `audio/` and `covers/` (square, about 600×600). Covers are mostly mixtape art or era photos of the artists.
+- Tracks checked so far are listed under Music below.
 
 ## More rooms ("a whole house")
 
