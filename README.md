@@ -16,6 +16,7 @@ It is plain HTML, CSS and JavaScript. There is no framework, no build step and n
 | `img/` | Also where your own photos go (travel, covers, clothes). |
 | `land.json` | Coastlines for the interactive globe. Don't edit. |
 | `d3.min.js` | Library that draws the globe (d3 v7). Don't edit. |
+| `worker/` | The message board's server code and database setup, pasted into Cloudflare. Not part of the website files. |
 
 ## Running it on your computer
 
@@ -178,6 +179,23 @@ Portrait photos work best.
 ```json
 "log": [ { "date": "2026-11-19", "text": "Stations and a player that keeps going while you look around" } ]
 ```
+
+## Messages (board and private questions)
+
+Visitors can leave a note on a public board or send a private question. Nothing appears on the board until you approve it, and questions are never shown publicly. Messages can't contain links, one visitor can send one message every 10 minutes, and the visitor's IP address is never stored (only a scrambled fingerprint used for the 10-minute limit). The country and city come from Cloudflare.
+
+It runs as a Cloudflare Worker (`worker/worker.js`) with a D1 database (`worker/schema.sql`). Setup, once, in the Cloudflare dashboard:
+
+1. **Database.** Storage & databases → D1 → Create database. Name it `wfo`. Open it, go to **Console**, paste everything from `worker/schema.sql`, and run it.
+2. **Worker.** Compute → Workers & Pages → Create → Start with Hello World. Name it `wfo-api` and deploy. Then **Edit code**, replace everything with `worker/worker.js`, and deploy again.
+3. **Connect the database.** In the Worker: Settings → Bindings → Add → D1 database. Variable name `DB`, database `wfo`. Save.
+4. **Admin key.** Settings → Variables and Secrets → Add. Type **Secret**, name `ADMIN_KEY`, value a long password you keep in your password manager. Save.
+5. **Address.** Settings → Domains & Routes → Add → Custom domain: `api.watchingfromorbit.com`.
+6. **Turn it on in the site.** In `content.json`, set `"api": { "base": "https://api.watchingfromorbit.com" }`.
+
+To read and approve messages, go to **https://api.watchingfromorbit.com/admin** and sign in with the admin key. Approve or reject board messages; mark questions done or delete them. Approved messages appear on the site within a few seconds.
+
+Until the observation deck's terminal exists, the way in is a line at the top of the Index: "Leave a message, or ask me something".
 
 ## The room pictures and the clickable areas
 

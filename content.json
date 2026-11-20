@@ -249,5 +249,9 @@
       "text": "The house moved to watchingfromorbit.com"
     }
   ],
-  "_log_help": "What's new: anything with an \"added\": \"YYYY-MM-DD\" date shows up automatically. Use log for other news, e.g. a new room."
+  "_log_help": "What's new: anything with an \"added\": \"YYYY-MM-DD\" date shows up automatically. Use log for other news, e.g. a new room.",
+  "api": {
+    "base": null,
+    "_help": "Address of the messages Worker, e.g. https://api.watchingfromorbit.com. null hides messages."
+  }
 }

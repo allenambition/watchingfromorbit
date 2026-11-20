@@ -507,6 +507,28 @@ html.radio-on .room-index{right:calc(clamp(18px,3vw,40px) + 68px)}
 .cw-actions button{color:#f3ece2;border:1px solid rgba(255,255,255,.2)}
 .cw-actions a{background:#9b3b2e;color:#fff}
 
+
+/* ---------- messages ---------- */
+.msg-tabs{display:flex;gap:22px;margin:26px 0 6px;border-bottom:1px solid var(--line)}
+.msg-tabs button{padding:8px 0;font-size:15px;color:var(--mute);border-bottom:2px solid transparent;margin-bottom:-1px}
+.msg-tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--glow)}
+.msg-form{max-width:560px;margin-top:18px}
+.msg-l{display:block;font-size:14px;color:var(--mute);margin-bottom:14px}
+.msg-l input,.msg-l textarea{display:block;width:100%;margin-top:6px;font:inherit;font-size:16px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:6px;padding:10px 12px;outline:none;resize:vertical}
+.msg-l input:focus,.msg-l textarea:focus{border-color:var(--glow)}
+.msg-hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.msg-row{display:flex;justify-content:space-between;align-items:center}
+.msg-row .play-record{margin-top:0}
+.msg-count{font-size:13px;color:var(--mute)}
+.msg-status{min-height:1.4em;font-size:14px;margin:10px 0 0}
+.msg-board{max-width:620px;margin-top:40px}
+.msg-board h3{font-family:var(--display);font-weight:400;font-size:24px;margin:0 0 4px}
+.msg{padding:14px 0;border-bottom:1px solid var(--line)}
+.msg p{margin:0;white-space:pre-wrap;line-height:1.55}
+.msg .who{margin-top:6px;font-size:13px;color:var(--mute)}
+.ix-msg{margin:18px 0 0;font-size:15px}
+.ix-msg button{text-decoration:underline;text-underline-offset:.2em;text-decoration-color:var(--mute)}
+
 /* ---------- drawer ---------- */
 .drawer{position:fixed;inset:0;z-index:20;display:none}
 .drawer.open{display:block}
@@ -716,6 +738,24 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
     </div>
     <input type="search" class="ix-q" id="ix-q" placeholder="Search places, music, the shelf" aria-label="Search the site" autocomplete="off">
     <div class="ix-out" id="ix-out" aria-live="polite"></div>
+  </section>
+
+  <section id="messages">
+    <div class="prose">
+      <h2>Messages</h2>
+      <p class="mute">Leave a note on the board, or send me a question only I'll see. I read everything before it goes up.</p>
+    </div>
+    <div class="msg-tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-kind="board">Board</button><button role="tab" aria-selected="false" data-kind="question">Ask me something</button>
+    </div>
+    <form class="msg-form" id="msg-form" novalidate>
+      <label class="msg-l">Your name, if you want <input name="name" maxlength="40" autocomplete="nickname"></label>
+      <label class="msg-l"><span id="msg-body-label">Message</span> <textarea name="body" maxlength="500" rows="4" required></textarea></label>
+      <label class="msg-hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+      <div class="msg-row"><span class="msg-count" id="msg-count">0 / 500</span><button class="play-record" type="submit" id="msg-send">Send</button></div>
+      <p class="msg-status" id="msg-status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="msg-board" id="msg-board"></div>
   </section>
 
   <section id="globe">
@@ -1639,6 +1679,52 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
       e.preventDefault(); window.__openIndex(true);
     });
     if(location.hash === '#index') window.__openIndex(false);
+  })();
+
+
+  /* ---------- messages (needs content.json "api") ---------- */
+  (function(){
+    const api = c.api && c.api.base; if(!api) return;
+    // the way in, until the observation deck's terminal exists: a line at the top of the index
+    const ix = $('#ix-q'); const lead = document.createElement('p'); lead.className = 'ix-msg';
+    lead.innerHTML = '<button>Leave a message, or ask me something</button>'; ix.after(lead);
+    lead.querySelector('button').addEventListener('click', () => openDrawer('messages'));
+    const form = $('#msg-form'), status = $('#msg-status'), board = $('#msg-board');
+    let kind = 'board';
+    document.querySelectorAll('.msg-tabs button').forEach(b => b.addEventListener('click', () => {
+      kind = b.dataset.kind;
+      document.querySelectorAll('.msg-tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+      $('#msg-body-label').textContent = kind === 'board' ? 'Message' : 'Your question';
+      status.textContent = '';
+    }));
+    const ta = form.querySelector('textarea');
+    ta.addEventListener('input', () => { $('#msg-count').textContent = ta.value.length + ' / 500'; });
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const fd = new FormData(form); const body = String(fd.get('body')||'').trim();
+      if(body.length < 2){ status.textContent = 'Write something first.'; return; }
+      $('#msg-send').disabled = true; status.textContent = 'Sending…';
+      try{
+        const r = await fetch(api + '/messages', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ kind, name: fd.get('name'), body, website: fd.get('website') }) });
+        const d = await r.json().catch(() => ({}));
+        if(r.ok){ form.reset(); $('#msg-count').textContent = '0 / 500'; status.textContent = kind === 'board' ? 'Sent. It will show up here once I\'ve read it.' : 'Sent. Only I will see it.'; track('message/' + kind); }
+        else status.textContent = d.error || 'That didn\'t send. Try again in a minute.';
+      }catch(err){ status.textContent = 'That didn\'t send. Check your connection and try again.'; }
+      $('#msg-send').disabled = false;
+    });
+    const regions = (() => { try{ return new Intl.DisplayNames(['en'], {type:'region'}); }catch(e){ return null; } })();
+    const place = m => [m.city, m.country ? (regions ? regions.of(m.country) : m.country) : ''].filter(Boolean).join(', ');
+    let loaded = false;
+    async function load(){
+      if(loaded) return; loaded = true;
+      try{
+        const d = await (await fetch(api + '/messages')).json();
+        const list = d.messages || [];
+        board.innerHTML = '<h3>On the board</h3>' + (list.length ? list.map(m => `<div class="msg"><p>${esc(m.body)}</p><p class="who">${esc([m.name, place(m)].filter(Boolean).join(', '))}${m.created ? ' · ' + new Date(m.created*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : ''}</p></div>`).join('') : '<p class="empty">Nothing on the board yet. Be the first.</p>');
+      }catch(err){ board.innerHTML = '<p class="empty">The board couldn\'t load right now.</p>'; loaded = false; }
+    }
+    const obs = new MutationObserver(() => { if($('#messages').classList.contains('show')) load(); });
+    obs.observe($('#messages'), { attributes:true, attributeFilter:['class'] });
   })();
 
 })();
