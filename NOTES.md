@@ -60,6 +60,8 @@ Rule: only add an object that will get something new at least monthly. An empty 
 | Radio | Podcasts | Idea |
 | Clock or desk calendar | A "now" page | Idea |
 
+Not an object, but liked (2026-11-22): **real Chicago weather in the lounge porthole.** Rain on the glass when it's raining in Chicago, snow when it's snowing, drawn over the picture from a free weather service (Open-Meteo, no key needed). Needs no new content to stay alive. Build after the room picture is final.
+
 ## Two rooms: what goes where
 
 - **The lounge** (current room): a life of pleasure. Music, travel, food and drink, clothes, collections.
