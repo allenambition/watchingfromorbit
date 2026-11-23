@@ -180,6 +180,8 @@ Portrait photos work best.
 "log": [ { "date": "2026-11-19", "text": "Stations and a player that keeps going while you look around" } ]
 ```
 
+Write dates in `content.json` as `YYYY-MM-DD` (the site sorts by them); visitors see them as dd-mm-yyyy. Free text such as `"Summer 2025"` is shown as written.
+
 ## Messages (board and private questions)
 
 Visitors can leave a note on a public board or send a private question. Nothing appears on the board until you approve it, and questions are never shown publicly. Messages can't contain links, one visitor can send five messages an hour, and the visitor's IP address is never stored (only a scrambled fingerprint used for the hourly limit). The country and city come from Cloudflare.

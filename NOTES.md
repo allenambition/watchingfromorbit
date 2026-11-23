@@ -2,7 +2,7 @@
 
 Working notes for watchingfromorbit: decisions already made, what's planned, and the prompts and steps worked out along the way. `README.md` explains how the site works and how to add things; this file is the why and the what-next. Update it when a decision changes.
 
-Last updated: 2026-11-20.
+Last updated: 2026-11-22.
 
 ## Where things stand
 
@@ -32,7 +32,8 @@ Why widen at all: on a phone the room is cropped to a slice and swiped sideways;
 ### Generative Fill prompts for new objects
 
 - Left, near the porthole: "A 1970s brass refracting telescope on a wooden tripod, angled up toward the window, warm tungsten light."
-- Right, past the wardrobe: "A small 1970s Italian space-age television with a rounded white plastic shell on a low walnut stand, a modern game console on the shelf below, screen softly glowing."
+- Right, past the wardrobe (replaces the TV, 2026-11-22): "A plain blank wall section with a slim retractable projection screen housing mounted at the ceiling, screen rolled up. A small retro-futurist projector on a low walnut stand facing it, a modern game console on the shelf below." The screen drops down in code when a video opens, so the picture shows it rolled up. Leave a clear blank wall under the housing.
+- The telescope prompt above is out of date: the telescope moved to the deck. The fallback ChatGPT prompt still names the TV and telescope; swap them before using it.
 - Right, in front of the wall: "A slim brass and smoked-glass bar cart with a few bourbon bottles and two crystal tumblers."
 
 ### Generating the room wide from the start
@@ -52,9 +53,9 @@ Rule: only add an object that will get something new at least monthly. An empty 
 | Object | Would hold | Status |
 |---|---|---|
 | Telescope by the porthole | Writing, big-picture ideas | Strongest candidate; matches the name |
-| Small TV with console | Games, PS5 clips | Planned with the widening |
+| Projector and screen (replaces the small TV) | Movie notes, PS5 clips, embedded YouTube | Decided 2026-11-22: lounge, not the deck. Needs the widening |
 | Bar cart | Bourbon and spirits notes | Optional |
-| Microphone or MPC | Aaron's own music, separate from Records | Idea |
+| Sealed studio door | Aaron's own music, separate from Records | Decided 2026-11-22; see "The studio" below |
 | Easel with a canvas | Paintings | Idea |
 | Camera on the console | Non-travel photos and film | Idea |
 | Radio | Podcasts | Idea |
@@ -76,6 +77,7 @@ Art: an easel overstates how much Aaron paints. Leaning toward a sketchbook he c
   - **The Earth in the window:** drawn live with the real day/night line for the moment someone visits; clicking it could show where visitors come from (GoatCounter).
   - Bookshelves are scenery; the real reading list stays on the lounge shelf.
   - Telescope moves here from the lounge plan. Next lounge panorama: no telescope, an unbranded game console, depth (a lounge chair in the foreground, staggered objects).
+- **Screens, one job each (2026-11-22).** The deck's terminal is for things visitors do: message board, questions, search, the log. The lounge's projector is for things visitors watch: movie notes, game clips, YouTube. No video screen on the deck; it would compete with the window.
 - The doorway between rooms should be a deliberate transition (an airlock or a stairwell up), since the deck is a different world.
 
 ### Observation deck: where the image stands (2026-11-20)
@@ -96,6 +98,13 @@ Tried and dropped:
 
 Open: what sits on the table. It only needs to fill the space quietly and isn't clickable. Leading idea: a survey map of the surrounding crater (same look as the star chart, but true to the place). Others: a tray of labelled rock samples; a typewriter with a page in it (risk: looks clickable); open books and papers. Also consider a smaller slab or the object off-centre so the window stays the focus.
 
+### The Earth: what's true from the moon (2026-11-22)
+
+- From the moon's near side, Earth doesn't rise or set. It hangs in the same spot and turns. Keep it fixed in the window.
+- Earth shows phases from the moon, opposite to the moon's from here: when Chicago sees a full moon, the deck sees a nearly dark Earth. The live day/night line already makes this happen if it's computed from the moon's real position. On those nights the Earth is mostly dark, so city lights on the night side matter. Chicago glowing on the dark half is the moment to aim for.
+- Clouds and weather on the disc are fair game.
+- No ISS or satellites. From the moon the ISS is about magnitude 11 to 12, far past naked-eye visibility. Dropped by choice.
+
 ### Messages: limits
 
 - Five messages per visitor per hour, no gap between them; 300 a day across the site. Changed 2026-11-20 from one per 10 minutes.
@@ -107,6 +116,14 @@ Open: what sits on the table. It only needs to fill the space quietly and isn't 
 - Records hold playlists (Apple Music now, Spotify later). Stations hold uploaded tracks, grouped by theme (first: blog era). A station shuffles; visitors can also play a track now, play it next, or add it to the queue.
 - Files and covers live in R2: `audio/` and `covers/` (square, about 600×600). Covers are mostly mixtape art or era photos of the artists.
 - Tracks checked so far are listed under Music below.
+
+## The studio (decided 2026-11-22)
+
+- Aaron's own music gets its own room, reached by a door in the **lounge** (music already lives there; the deck stays the long view).
+- Until launch the door is sealed: a blast door or airlock with a red status light and a small panel ("ACCESS RESTRICTED — CLEARANCE PENDING" or "SEALED UNTIL [date]"). No chains or construction signs; they don't belong in a moon base.
+- Hover or tap: muffled bass through the door, like a session going on inside. A short clip Aaron is fine with anyone hearing.
+- One sealed door at most. More than one makes the site look unfinished.
+- The lock is decoration, not security. Anything uploaded to the repo or to R2 can be found by anyone who looks. Unreleased songs stay off both until release day.
 
 ## More rooms ("a whole house")
 
@@ -135,7 +152,22 @@ Possible later: each room is its own picture pair, hotspots and objects, with a 
 
 - Getting them off the console: PS5 Settings > Captures > Auto-upload, then save from the PlayStation App to the phone. Uploads stay in the app for 14 days; clips up to 3 minutes; nothing above 1080p uploads (record at 1080p, or use a USB stick).
 - Short clips: compressed (about 5–10 MB per 30 seconds) and stored on the site or R2. Longer ones: YouTube (unlisted is fine), embedded.
-- Will live on the TV once the room is widened; on the shelf as video items until then.
+- Will live on the projector once the lounge is widened; on the shelf as video items until then.
+- Clip files go in R2 (`video/`), never in the repo.
+- YouTube embeds: show the thumbnail and load the real player only on click. Several live YouTube players on one page make it slow, worst in Instagram's in-app browser.
+
+## Security (2026-11-22)
+
+The site itself is static files, so nobody can change it by visiting it. Changing it means getting into one of the accounts behind it. Protect those:
+
+- **GitHub (allenambition):** passkey or authenticator-app two-factor, not SMS. Save the recovery codes in the password manager. This account also holds ShiftSyncApp.
+- **Cloudflare:** same. It controls the domain, DNS, R2 and the message Worker. Whoever gets in here can point watchingfromorbit.com anywhere.
+- **GitHub Pages settings:** "Enforce HTTPS" on. Verify the domain under GitHub profile Settings > Pages > Verified domains (adds a TXT record at Cloudflare). This stops someone else's repo from claiming the domain if Pages is ever switched off.
+- **Domain:** Cloudflare Registrar locks transfers by default; leave it locked and keep auto-renew on. Make sure the card on file stays current, since a lapsed domain is the easiest way to lose it.
+- **No secrets in the repo.** The repo is public. `ADMIN_KEY` and any R2 access keys live only in Cloudflare's settings. If one ever lands in a commit, deleting it isn't enough; change the key.
+- **Message admin page:** the only login on the site. Its key should be long and random (password manager). It has no limit on wrong guesses, so the next step is putting Cloudflare Access (free) in front of `api.watchingfromorbit.com/admin`, which adds a one-time code sent to Aaron's email before the page loads.
+- Already handled: visitor messages are escaped before display (no scripts can be posted), links are blocked, five per visitor per hour, 300 a day, everything held for approval.
+- R2: public read through `media.watchingfromorbit.com` only. Upload through the Cloudflare dashboard; don't create API tokens with write access unless something needs one.
 
 ## Visitor counting
 
@@ -151,3 +183,4 @@ Possible later: each room is its own picture pair, hotspots and objects, with a 
 - Text follows the plain-writing guide (no hype words, no "not just X but Y", no fragments for effect).
 - Ambient room sound is off. A real recorded loop could come back later; the generated one didn't sound like the room.
 - Nothing goes live that Aaron didn't write or supply; placeholders are not published.
+- Public dates are dd-mm-yyyy (decided 2026-11-22). Stored as yyyy-mm-dd in `content.json` so they sort; the site converts them. The private admin page keeps US format.

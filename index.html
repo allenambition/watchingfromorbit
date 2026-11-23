@@ -1250,6 +1250,12 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   $('#links').innerHTML = (c.links||[]).map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join('');
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  // Public dates are shown as dd-mm-yyyy. Accepts "yyyy-mm-dd" text or a Date; anything else (e.g. "Summer 2025") passes through unchanged.
+  function fmtDate(d){
+    if(d instanceof Date) return isNaN(d) ? '' : [String(d.getDate()).padStart(2,'0'), String(d.getMonth()+1).padStart(2,'0'), d.getFullYear()].join('-');
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d||'').trim());
+    return m ? `${m[3]}-${m[2]}-${m[1]}` : (d || '');
+  }
   const HUES=[28,205,350,95,18,222,40,160];
   function hueFor(str, given){ if(given!=null) return given; let h=0; for(const ch of String(str)) h=(h*31+ch.charCodeAt(0))%997; return HUES[h%HUES.length]; }
   function pressOnly(container, btn){ container.querySelectorAll('[aria-pressed]').forEach(b => b.setAttribute('aria-pressed', b===btn)); }
@@ -1557,7 +1563,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
           </div>
         </header>
         ${rest.length ? `<section class="j-gallery" aria-label="Photos">${rest.map((ph,i) => `<figure><button data-i="${i+1}" aria-label="View photo${ph.caption ? ': '+esc(ph.caption) : ''}"><img src="${esc(small(ph))}" alt="${esc(ph.caption||p.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${esc(ph.src)}'"></button>${ph.caption ? `<figcaption>${esc(ph.caption)}</figcaption>` : ''}</figure>`).join('')}</section>` : ''}
-        ${essays.length || refl.length ? `<section class="j-writing">${essays.map(e => `<article><h3>${esc(e.title)}</h3><div class="sub">${esc([e.subtitle,e.date].filter(Boolean).join(', '))}</div>${paras(e.body)}</article>`).join('')}${refl.map(r => `<div class="reflection"><div class="sub">${esc([r.title,r.date].filter(Boolean).join(', '))}</div>${paras(r.text)}</div>`).join('')}</section>` : ''}
+        ${essays.length || refl.length ? `<section class="j-writing">${essays.map(e => `<article><h3>${esc(e.title)}</h3><div class="sub">${esc([e.subtitle,fmtDate(e.date)].filter(Boolean).join(', '))}</div>${paras(e.body)}</article>`).join('')}${refl.map(r => `<div class="reflection"><div class="sub">${esc([r.title,fmtDate(r.date)].filter(Boolean).join(', '))}</div>${paras(r.text)}</div>`).join('')}</section>` : ''}
         <nav class="j-foot"><button data-go="globe">Back to the globe</button><button data-go="room">Back to the room</button></nav>`;
       if(window.__track) window.__track('place/' + (p.id || p.name));
       lastFocus = document.activeElement;
@@ -1644,10 +1650,9 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
       open: () => { openDrawer('readables'); clickIn('#shelf .cover', i); } }));
     (c.closet||[]).forEach((g,i) => items.push({ group:'The closet', title:g.name, sub:g.maker, text:g.note, added:g.added,
       open: () => { openDrawer('closet'); clickIn('#rail .hanger', i); } }));
-    (c.essays||[]).forEach(e => items.push({ group:'Writing', title:e.title, sub:join(e.subtitle, e.date), text:e.body, long:true, added:e.added || e.date,
+    (c.essays||[]).forEach(e => items.push({ group:'Writing', title:e.title, sub:join(e.subtitle, fmtDate(e.date)), text:e.body, long:true, added:e.added || e.date,
       open: () => { const p = (c.places||[]).find(p => (p.id || p.name) === e.place || p.name === e.place); if(p && window.__openPlace) window.__openPlace(p); } }));
 
-    const fmtDate = d => { const t = new Date(d + 'T12:00:00'); return isNaN(t) ? d : t.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }); };
     const news = items.filter(x => x.added && !x.track).map(x => ({ date:x.added, text:`${x.group === 'Places' ? 'New place' : 'Added'}: ${x.title}`, item:x }))
       .concat((c.log||[]).filter(l => l.date && l.text).map(l => ({ date:l.date, text:l.text })))
       .sort((a,b) => b.date.localeCompare(a.date)).slice(0, 8);
@@ -1720,7 +1725,7 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
       try{
         const d = await (await fetch(api + '/messages')).json();
         const list = d.messages || [];
-        board.innerHTML = '<h3>On the board</h3>' + (list.length ? list.map(m => `<div class="msg"><p>${esc(m.body)}</p><p class="who">${esc([m.name, place(m)].filter(Boolean).join(', '))}${m.created ? ' · ' + new Date(m.created*1000).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : ''}</p></div>`).join('') : '<p class="empty">Nothing on the board yet. Be the first.</p>');
+        board.innerHTML = '<h3>On the board</h3>' + (list.length ? list.map(m => `<div class="msg"><p>${esc(m.body)}</p><p class="who">${esc([m.name, place(m)].filter(Boolean).join(', '))}${m.created ? ' · ' + fmtDate(new Date(m.created*1000)) : ''}</p></div>`).join('') : '<p class="empty">Nothing on the board yet. Be the first.</p>');
       }catch(err){ board.innerHTML = '<p class="empty">The board couldn\'t load right now.</p>'; loaded = false; }
     }
     const obs = new MutationObserver(() => { if($('#messages').classList.contains('show')) load(); });
