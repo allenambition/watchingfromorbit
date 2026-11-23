@@ -1250,11 +1250,15 @@ footer{margin-top:clamp(80px,12vw,140px);color:var(--mute);font-style:italic;tra
   $('#links').innerHTML = (c.links||[]).map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join('');
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-  // Public dates are shown as dd-mm-yyyy. Accepts "yyyy-mm-dd" text or a Date; anything else (e.g. "Summer 2025") passes through unchanged.
+  // Public dates are shown in AP style: "Nov. 22, 2026", "March 3, 2026". Accepts "yyyy-mm-dd" text or a Date; anything else (e.g. "Summer 2025") passes through unchanged.
+  const AP_MONTHS = ['Jan.','Feb.','March','April','May','June','July','Aug.','Sept.','Oct.','Nov.','Dec.'];
   function fmtDate(d){
-    if(d instanceof Date) return isNaN(d) ? '' : [String(d.getDate()).padStart(2,'0'), String(d.getMonth()+1).padStart(2,'0'), d.getFullYear()].join('-');
-    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d||'').trim());
-    return m ? `${m[3]}-${m[2]}-${m[1]}` : (d || '');
+    if(!(d instanceof Date)){
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d||'').trim());
+      if(!m) return d || '';
+      d = new Date(+m[1], +m[2]-1, +m[3]);
+    }
+    return isNaN(d) ? '' : `${AP_MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
   }
   const HUES=[28,205,350,95,18,222,40,160];
   function hueFor(str, given){ if(given!=null) return given; let h=0; for(const ch of String(str)) h=(h*31+ch.charCodeAt(0))%997; return HUES[h%HUES.length]; }

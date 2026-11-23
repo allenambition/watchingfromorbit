@@ -180,7 +180,7 @@ Portrait photos work best.
 "log": [ { "date": "2026-11-19", "text": "Stations and a player that keeps going while you look around" } ]
 ```
 
-Write dates in `content.json` as `YYYY-MM-DD` (the site sorts by them); visitors see them as dd-mm-yyyy. Free text such as `"Summer 2025"` is shown as written.
+Write dates in `content.json` as `YYYY-MM-DD` (the site sorts by them); visitors see them in AP style (Nov. 22, 2026). Free text such as `"Summer 2025"` is shown as written.
 
 ## Messages (board and private questions)
 

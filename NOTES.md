@@ -183,4 +183,4 @@ The site itself is static files, so nobody can change it by visiting it. Changin
 - Text follows the plain-writing guide (no hype words, no "not just X but Y", no fragments for effect).
 - Ambient room sound is off. A real recorded loop could come back later; the generated one didn't sound like the room.
 - Nothing goes live that Aaron didn't write or supply; placeholders are not published.
-- Public dates are dd-mm-yyyy (decided 2026-11-22). Stored as yyyy-mm-dd in `content.json` so they sort; the site converts them. The private admin page keeps US format.
+- Public dates are written out in AP style: Nov. 22, 2026; March 3, 2026 (decided 2026-11-22). Stored as yyyy-mm-dd in `content.json` so they sort; the site converts them.
