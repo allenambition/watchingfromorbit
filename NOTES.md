@@ -62,6 +62,10 @@ Rule: only add an object that will get something new at least monthly. An empty 
 
 Not an object, but liked (2026-11-22): **real Chicago weather in the lounge porthole.** Rain on the glass when it's raining in Chicago, snow when it's snowing, drawn over the picture from a free weather service (Open-Meteo, no key needed). Needs no new content to stay alive. Build after the room picture is final.
 
+Ambient motion (2026-11-22): Aaron wants small live things that make the rooms feel lived in (candle smoke, the cat idea). Keep it to a few, mostly on things that aren't clickable so motion doesn't become a hint, and switch it off for visitors whose devices ask for reduced motion. Candidates: weather in the porthole, lamp flicker, turntable spinning only while something plays, terminal cursor blinking, dust in lamp light, a cat. No twinkling stars on the deck (no air on the moon).
+
+Art: an easel overstates how much Aaron paints. Leaning toward a sketchbook he can flip through, dated, practice included, instead. Museum writing goes on globe pages as essays tied to a place. Projector only if he's writing film notes; the animation alone isn't a reason.
+
 ## Two rooms: what goes where
 
 - **The lounge** (current room): a life of pleasure. Music, travel, food and drink, clothes, collections.
